@@ -268,13 +268,17 @@
         // ==========================================
         // 🌟 1. 初始化 Supabase 連線 🌟
         // ==========================================
+    
         const SUPABASE_URL = 'https://vwoeztbwollawwojnmgz.supabase.co'; 
         const SUPABASE_KEY = 'sb_publishable_0dJ9RgOdwdkCp9g648JyLA_yQ9q7Dtb';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        // 把 supabase 改名為 supabaseClient
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         async function syncDataToCloud() {
             try {
-                const { data, error } = await supabase
+                // 這裡也要跟著改成 supabaseClient
+                const { data, error } = await supabaseClient
                     .from('users')
                     .update({ green_points: userPoints, travel_fund: userWallet })
                     .eq('username', 'Gasoline');
