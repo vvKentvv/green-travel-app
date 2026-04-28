@@ -134,8 +134,12 @@
 </head>
 <body>
 
-    <div class="header">
-        🌍 綠途-行程整合APP
+<div class="header">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+            <img src="logo.png" alt="LUTU Logo" style="height: 45px; border-radius: 8px;">
+            <span style="letter-spacing: 2px;">綠途-行程整合APP</span>
+        </div>
+
         <div class="auth-container">
             <span id="current-user-display" style="font-size: 14px;">尚未登入</span>
             <button id="btn-login-logout" class="btn-orange" style="padding: 6px 15px; font-size: 14px; border-radius: 20px;" onclick="openModal('user-auth-modal')">
