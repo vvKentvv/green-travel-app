@@ -140,9 +140,9 @@
             <span style="letter-spacing: 2px;">綠途-行程整合APP</span>
         </div>
 
-        <div class="auth-container">
+    <div class="auth-container">
             <span id="current-user-display" style="font-size: 14px;">尚未登入</span>
-            <button id="btn-login-logout" class="btn-orange" style="padding: 6px 15px; font-size: 14px; border-radius: 20px;" onclick="openModal('user-auth-modal')">
+            <button id="btn-login-logout" class="btn-orange" style="padding: 6px 15px; font-size: 14px; border-radius: 20px;" onclick="toggleAuth()">
                 登入 / 註冊
             </button>
         </div>
@@ -334,23 +334,43 @@
         const SUPABASE_KEY = 'sb_publishable_0dJ9RgOdwdkCp9g648JyLA_yQ9q7Dtb';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // ==========================================
+      // ==========================================
         // 🌟 2. 會員系統 & 讀取雲端資料
         // ==========================================
         let currentUser = null;
 
-        // 監聽登入狀態改變
         supabaseClient.auth.onAuthStateChange(async (event, session) => {
             if (session && session.user) {
                 currentUser = session.user;
                 let nickname = currentUser.email.split('@')[0];
                 document.getElementById('current-user-display').innerText = `👋 你好, ${nickname}`;
                 document.getElementById('btn-login-logout').innerText = "登出";
-                document.getElementById('btn-login-logout').onclick = handleLogout;
                 closeModal('user-auth-modal');
                 
-                // 🌟 新增：登入後自動「讀檔」
                 await fetchUserData(nickname);
+            } else {
+                currentUser = null;
+                document.getElementById('current-user-display').innerText = "尚未登入";
+                document.getElementById('btn-login-logout').innerText = "登入 / 註冊";
+                
+                userPoints = 0; userWallet = 0; inventory = {};
+                updateWalletDisplay(); updateMailbox(); updateMascot();
+            }
+        });
+
+        // 🌟 新增：由這個智慧開關統一判斷按鈕要幹嘛
+        function toggleAuth() {
+            if (currentUser) {
+                handleLogout(); // 如果有登入，按鈕就是執行登出
+            } else {
+                openModal('user-auth-modal'); // 如果沒登入，按鈕就是打開登入視窗
+            }
+        }
+
+        async function handleLogout() { 
+            await supabaseClient.auth.signOut(); 
+            alert("已登出！"); 
+        }
             } else {
                 currentUser = null;
                 document.getElementById('current-user-display').innerText = "尚未登入";
