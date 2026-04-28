@@ -367,11 +367,14 @@
             }
         }
 
-        async function handleLogout() { 
+      async function handleLogout() { 
             await supabaseClient.auth.signOut(); 
             alert("已登出！"); 
         }
-            } else {
+
+        // 📥 讀檔函數：從資料庫把點數、錢、商品抓下來
+        async function fetchUserData(username) {
+          
                 currentUser = null;
                 document.getElementById('current-user-display').innerText = "尚未登入";
                 document.getElementById('btn-login-logout').innerText = "登入 / 註冊";
