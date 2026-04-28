@@ -363,29 +363,27 @@
             }
         });
 
-        // 📥 讀檔函數：從資料庫把點數、錢、商品抓下來
-    async function fetchUserData(username) {
-    const { data, error } = await supabaseClient
-        .from('users')
-        .select('*')
-        .eq('username', username)
-        .single();
+ // 📥 讀檔函數：從資料庫把點數、錢、商品抓下來
+        async function fetchUserData(username) {
+            const { data, error } = await supabaseClient
+                .from('users')
+                .select('*')
+                .eq('username', username)
+                .single();
 
-    if (data) {
-        userPoints = data.green_points || 0;    // 覆蓋本地點數
-        userWallet = data.travel_fund || 0;    // 覆蓋本地錢包
-        inventory = data.inventory || {};       // 覆蓋本地背包
-        updateWalletDisplay();                  // 刷新畫面
-        updateMailbox();                        // 刷新信箱
-    }
-
-                console.log("📥 讀檔成功！", data);
+            if (data) {
+                userPoints = data.green_points || 0;    // 覆蓋本地點數
+                userWallet = data.travel_fund || 0;     // 覆蓋本地錢包
+                inventory = data.inventory || {};       // 覆蓋本地背包
+                updateWalletDisplay();                  // 刷新畫面
+                updateMailbox();                        // 刷新信箱
+                console.log("📥 讀檔成功！", data);     // ✅ 把這行收進 if 裡面
             } else {
                 // 如果是全新註冊的帳號，資料庫可能還沒有他，幫他建立一筆空資料
                 await supabaseClient.from('users').insert([{ username: username, green_points: 0, travel_fund: 0, inventory: {} }]);
             }
         }
-
+    
         async function handleSignup() {
             // ... (原本的註冊邏輯不動)
             let email = document.getElementById('auth-email').value;
