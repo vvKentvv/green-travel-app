@@ -228,6 +228,9 @@
 
             <div class="card" style="background-color: #f3e5f5; border: 2px solid #e1bee7;">
                 <h3 style="color: #8e24aa; border-bottom: 2px solid #e1bee7;">📬 我的信箱 (戰利品)</h3>
+                <button class="btn-blue" style="width: 100%; margin-bottom: 15px; padding: 12px; font-size: 16px; border-radius: 8px; box-shadow: 0 4px 6px rgba(25, 118, 210, 0.2);" onclick="openModal('qr-scanner-modal')">
+                 📷 掃描店家環保任務 QR Code
+             </button>
                 <p style="font-size: 12px; color: #666;">點擊「使用」出示條碼，感應後票券將自動扣除。</p>
                 <div id="mailbox-container">
                     <p style="text-align: center; color: #999;">目前信箱是空的喔！</p>
@@ -296,7 +299,33 @@
             </button>
         </div>
     </div>
+    
+<div class="modal-overlay" id="qr-scanner-modal">
+     <div class="modal-content" style="width: 350px; text-align: center; background-color: #1a1a1a; color: white; border: 2px solid #4CAF50;">
+         <button class="close-btn" style="color: #fff;" onclick="closeModal('qr-scanner-modal')">×</button>
+         <h3 style="color: #4CAF50;">📷 實境解謎與環保任務</h3>
+         <p style="font-size: 13px; color: #aaa;">請對準合作店家的活動 QR Code</p>
 
+         <div style="width: 100%; height: 220px; background: #333; margin: 15px 0; position: relative; border: 2px dashed #8bc34a; border-radius: 8px; overflow: hidden;">
+             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #777; font-size: 14px;">
+                 🎥 相機模組啟動中...<br>(請將 QR Code 放入框內)
+             </div>
+             <div style="width: 100%; height: 3px; background: #00ff00; position: absolute; top: 0; left: 0; box-shadow: 0 0 12px #00ff00; animation: scanAnim 2s infinite linear;"></div>
+         </div>
+
+         <style>
+             @keyframes scanAnim {
+                 0% { top: 0; }
+                 50% { top: 100%; }
+                 100% { top: 0; }
+             }
+         </style>
+
+         <button class="btn-green" style="width: 100%; padding: 15px; font-size: 16px; border-radius: 8px; font-weight: bold;" onclick="simulateTaskSuccess()">
+             ✨ 模擬掃描成功 (Demo 專用)
+         </button>
+     </div>
+ </div>
     <script>
         // ==========================================
         // 🌟 1. 初始化 Supabase 連線
@@ -815,7 +844,36 @@
         }
 
         function openBarcode(itemName) { itemToConsume = itemName; document.getElementById('barcode-title').innerText = `${inventory[itemName].icon} ${itemName}`; openModal('barcode-modal'); }
+// ==========================================
+        // 🌟 6. 實境任務掃描邏輯
+        // ==========================================
+        function simulateTaskSuccess() {
+            // 1. 關閉掃描相機
+            closeModal('qr-scanner-modal');
 
+            // 2. 設定專屬獎勵 (我們用地緣之便，設定八里限定任務！)
+            let bonusExp = 150;
+            let rewardItem = "☕ 八里左岸咖啡 買一送一券 (在地店家)";
+            let rewardIcon = "🎟️";
+
+            // 3. 把點數加進錢包，把道具塞進信箱背包
+            userPoints += bonusExp;
+            if(inventory[rewardItem]) {
+                inventory[rewardItem].count += 1;
+            } else {
+                inventory[rewardItem] = { count: 1, icon: rewardIcon };
+            }
+
+            // 4. 更新畫面並自動存檔到雲端
+            updateWalletDisplay();
+            updateMailbox();
+            // 如果你之後加了吉祥物進化，可以把 updateMascot() 的註解拿掉
+            // if(typeof updateMascot === 'function') updateMascot(); 
+            syncDataToCloud();
+
+            // 5. 彈出華麗的成功結算畫面
+            alert(`🎉 實境任務達成！\n【八里左岸：自備環保杯喝咖啡】\n\n您獲得了以下獎勵：\n⭐ +${bonusExp} 綠能點數\n🎁 ${rewardItem}\n\n(提示：票券已自動放入信箱，點數已同步雲端！)`);
+        }
         function confirmConsumeTicket() {
             if(inventory[itemToConsume]) {
                 inventory[itemToConsume].count -= 1;
