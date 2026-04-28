@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>綠途-行程整合APP</title>
+    <title>綠途-行程整合APP (旗艦版)</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -24,6 +24,11 @@
             background-color: var(--primary); color: white; width: 100%;
             text-align: center; padding: 15px 0; font-size: 24px; font-weight: bold;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative; /* 為了放右上角的登入按鈕 */
+        }
+        .auth-container {
+            position: absolute; right: 20px; top: 12px;
+            display: flex; align-items: center; gap: 10px;
         }
         .container {
             display: flex; flex-wrap: wrap; width: 95%; max-width: 1200px;
@@ -124,11 +129,20 @@
             border-radius: 6px; margin-bottom: 8px; display: flex;
             align-items: center; justify-content: space-between;
         }
+        .auth-link { font-size: 13px; color: var(--blue); cursor: pointer; text-decoration: underline; margin-top: 10px; display: inline-block;}
     </style>
 </head>
 <body>
 
-    <div class="header">🌍 綠途-行程整合APP</div>
+    <div class="header">
+        🌍 綠途-行程整合APP
+        <div class="auth-container">
+            <span id="current-user-display" style="font-size: 14px;">尚未登入</span>
+            <button id="btn-login-logout" class="btn-orange" style="padding: 6px 15px; font-size: 14px; border-radius: 20px;" onclick="openModal('user-auth-modal')">
+                登入 / 註冊
+            </button>
+        </div>
+    </div>
 
     <div class="container">
         <div class="left-panel">
@@ -218,6 +232,21 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="user-auth-modal">
+        <div class="modal-content" style="width: 320px; text-align: center;">
+            <button class="close-btn" onclick="closeModal('user-auth-modal')">×</button>
+            <h3 style="color: var(--blue);">👤 會員系統</h3>
+            <p style="font-size: 12px; color: #666; margin-bottom: 15px;">登入後即可永久保存綠能點數與信箱票券</p>
+            
+            <input type="email" id="auth-email" class="search-input" style="width: 90%; margin-bottom: 10px; padding: 10px;" placeholder="信箱 (Email)">
+            <input type="password" id="auth-password" class="search-input" style="width: 90%; margin-bottom: 15px; padding: 10px;" placeholder="密碼 (至少 6 碼)">
+            
+            <button class="btn-blue" style="width: 95%; margin-bottom: 10px; padding: 12px;" onclick="handleLogin()">登入</button>
+            <button class="btn-green" style="width: 95%; margin-bottom: 10px; padding: 12px;" onclick="handleSignup()">註冊新帳號</button>
+            <span class="auth-link" onclick="handleResetPassword()">忘記密碼？點此發送重置信</span>
+        </div>
+    </div>
+
     <div class="modal-overlay" id="co2-modal">
         <div class="modal-content" style="width: 450px;">
             <button class="close-btn" onclick="closeModal('co2-modal')">×</button>
@@ -266,29 +295,103 @@
 
     <script>
         // ==========================================
-        // 🌟 1. 初始化 Supabase 連線 🌟
+        // 🌟 1. 初始化 Supabase 連線
         // ==========================================
-    
         const SUPABASE_URL = 'https://vwoeztbwollawwojnmgz.supabase.co'; 
         const SUPABASE_KEY = 'sb_publishable_0dJ9RgOdwdkCp9g648JyLA_yQ9q7Dtb';
-        
-        // 把 supabase 改名為 supabaseClient
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        // ==========================================
+        // 🌟 2. 會員系統 (Login/Signup/Logout/Reset)
+        // ==========================================
+        let currentUser = null;
+
+        // 監聽登入狀態改變
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+            if (session && session.user) {
+                currentUser = session.user;
+                // 取信箱的 @ 前面當作暱稱顯示
+                let nickname = currentUser.email.split('@')[0];
+                document.getElementById('current-user-display').innerText = `👋 你好, ${nickname}`;
+                document.getElementById('btn-login-logout').innerText = "登出";
+                document.getElementById('btn-login-logout').onclick = handleLogout;
+                closeModal('user-auth-modal');
+            } else {
+                currentUser = null;
+                document.getElementById('current-user-display').innerText = "尚未登入";
+                document.getElementById('btn-login-logout').innerText = "登入 / 註冊";
+                document.getElementById('btn-login-logout').onclick = () => openModal('user-auth-modal');
+            }
+        });
+
+        async function handleSignup() {
+            let email = document.getElementById('auth-email').value;
+            let password = document.getElementById('auth-password').value;
+            if(!email || !password) return alert("請填寫信箱與密碼！");
+            const { data, error } = await supabaseClient.auth.signUp({ email: email, password: password });
+            if(error) alert("❌ 註冊失敗：" + error.message);
+            else alert("✅ 註冊成功！若 Supabase 有開信箱驗證，請先去收信確認。否則可直接登入！");
+        }
+
+        async function handleLogin() {
+            let email = document.getElementById('auth-email').value;
+            let password = document.getElementById('auth-password').value;
+            if(!email || !password) return alert("請填寫信箱與密碼！");
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email: email, password: password });
+            if(error) alert("❌ 登入失敗：" + error.message);
+            else alert("✅ 登入成功！");
+        }
+
+        async function handleLogout() {
+            await supabaseClient.auth.signOut();
+            alert("已登出！");
+        }
+
+        async function handleResetPassword() {
+            let email = document.getElementById('auth-email').value;
+            if(!email) return alert("請先在上方輸入您的信箱，再點擊忘記密碼！");
+            const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email);
+            if(error) alert("❌ 發送重置信失敗：" + error.message);
+            else alert("📩 密碼重置信已發送到您的信箱！");
+        }
+
+        // ==========================================
+        // 🌟 3. 雲端存檔 (綁定當前使用者)
+        // ==========================================
         async function syncDataToCloud() {
             try {
-                // 這裡也要跟著改成 supabaseClient
+                // 如果有登入，存在他自己的帳號；如果沒登入，存在 Gasoline 身上做測試
+                let targetUsername = currentUser ? currentUser.email.split('@')[0] : 'Gasoline';
+                
                 const { data, error } = await supabaseClient
                     .from('users')
                     .update({ green_points: userPoints, travel_fund: userWallet })
-                    .eq('username', 'Gasoline');
+                    .eq('username', targetUsername);
+                
                 if (error) throw error;
-                console.log("☁️ 雲端存檔成功！點數：", userPoints);
+                console.log(`☁️ 雲端存檔成功！(${targetUsername}) 點數：`, userPoints);
             } catch (err) {
                 console.error("❌ 雲端存檔失敗：", err.message);
             }
         }
 
+        // ==========================================
+        // 🌟 4. OSRM 動態切換交通工具模式
+        // ==========================================
+        function getOSRMProfile(trans) {
+            switch(trans) {
+                case "bike": return "cycling";
+                case "walk": return "foot";
+                case "car": 
+                case "moto": 
+                case "bus": 
+                case "train": 
+                    return "driving";
+                default: return "driving";
+            }
+        }
+
+        // 常數設定與資料
         const CAR_CO2_BASELINE = 0.14; 
         const POINTS_TO_CASH = 1000;
         const CASH_REWARD = 100;
@@ -544,7 +647,15 @@
         async function calculateMultiStopRoute() {
             if (waypoints.length < 2) { alert("請至少點擊起點與終點！"); return; }
             let coordsString = waypoints.map(wp => `${wp.lng},${wp.lat}`).join(';');
-            const url = `https://router.project-osrm.org/route/v1/driving/${coordsString}?overview=full&geometries=geojson&steps=true`;
+            
+            // 🌟 OSRM 動態交通工具切換
+            let activeProfile = "driving"; // 預設為汽車
+            if(waypoints.length > 0 && waypoints[0].nextTransport) {
+                activeProfile = getOSRMProfile(waypoints[0].nextTransport);
+            }
+
+            const url = `https://router.project-osrm.org/route/v1/${activeProfile}/${coordsString}?overview=full&geometries=geojson&steps=true`;
+            
             try {
                 const response = await fetch(url);
                 const data = await response.json();
@@ -629,9 +740,10 @@
             });
         }
 
+        // 修改原本的 requireAuth，直接叫出新的會員系統
         function requireAuth(callback) {
-            authCallback = callback; openModal('auth-modal');
-            document.getElementById('phone-input').value = ''; document.getElementById('code-input').value = ''; document.getElementById('code-section').style.display = 'none';
+            authCallback = callback; 
+            openModal('user-auth-modal');
         }
 
         function sendSMS() {
