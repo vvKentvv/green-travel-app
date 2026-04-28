@@ -302,38 +302,67 @@
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // ==========================================
-        // 🌟 2. 會員系統 (Login/Signup/Logout/Reset)
+        // 🌟 2. 會員系統 & 讀取雲端資料
         // ==========================================
         let currentUser = null;
 
         // 監聽登入狀態改變
-        supabaseClient.auth.onAuthStateChange((event, session) => {
+        supabaseClient.auth.onAuthStateChange(async (event, session) => {
             if (session && session.user) {
                 currentUser = session.user;
-                // 取信箱的 @ 前面當作暱稱顯示
                 let nickname = currentUser.email.split('@')[0];
                 document.getElementById('current-user-display').innerText = `👋 你好, ${nickname}`;
                 document.getElementById('btn-login-logout').innerText = "登出";
                 document.getElementById('btn-login-logout').onclick = handleLogout;
                 closeModal('user-auth-modal');
+                
+                // 🌟 新增：登入後自動「讀檔」
+                await fetchUserData(nickname);
             } else {
                 currentUser = null;
                 document.getElementById('current-user-display').innerText = "尚未登入";
                 document.getElementById('btn-login-logout').innerText = "登入 / 註冊";
                 document.getElementById('btn-login-logout').onclick = () => openModal('user-auth-modal');
+                
+                // 登出時清空畫面資料
+                userPoints = 0; userWallet = 0; inventory = {};
+                updateWalletDisplay(); updateMailbox();
             }
         });
 
+        // 📥 讀檔函數：從資料庫把點數、錢、商品抓下來
+        async function fetchUserData(username) {
+            const { data, error } = await supabaseClient
+                .from('users')
+                .select('*')
+                .eq('username', username)
+                .single();
+
+            if (data) {
+                userPoints = data.green_points || 0;
+                userWallet = data.travel_fund || 0;
+                inventory = data.inventory || {}; // 把雲端的背包抓下來
+                updateWalletDisplay();
+                updateMailbox();
+                console.log("📥 讀檔成功！", data);
+            } else {
+                // 如果是全新註冊的帳號，資料庫可能還沒有他，幫他建立一筆空資料
+                await supabaseClient.from('users').insert([{ username: username, green_points: 0, travel_fund: 0, inventory: {} }]);
+            }
+        }
+
         async function handleSignup() {
+            // ... (原本的註冊邏輯不動)
             let email = document.getElementById('auth-email').value;
             let password = document.getElementById('auth-password').value;
             if(!email || !password) return alert("請填寫信箱與密碼！");
             const { data, error } = await supabaseClient.auth.signUp({ email: email, password: password });
             if(error) alert("❌ 註冊失敗：" + error.message);
-            else alert("✅ 註冊成功！若 Supabase 有開信箱驗證，請先去收信確認。否則可直接登入！");
+            else alert("✅ 註冊成功！");
         }
 
         async function handleLogin() {
+            // ... (原本的登入邏輯不動)
             let email = document.getElementById('auth-email').value;
             let password = document.getElementById('auth-password').value;
             if(!email || !password) return alert("請填寫信箱與密碼！");
@@ -348,6 +377,7 @@
         }
 
         async function handleResetPassword() {
+            // ... (原本的忘記密碼邏輯不動)
             let email = document.getElementById('auth-email').value;
             if(!email) return alert("請先在上方輸入您的信箱，再點擊忘記密碼！");
             const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email);
@@ -356,16 +386,16 @@
         }
 
         // ==========================================
-        // 🌟 3. 雲端存檔 (綁定當前使用者)
+        // 🌟 3. 雲端存檔 (綁定當前使用者 & 存入背包商品)
         // ==========================================
         async function syncDataToCloud() {
             try {
-                // 如果有登入，存在他自己的帳號；如果沒登入，存在 Gasoline 身上做測試
                 let targetUsername = currentUser ? currentUser.email.split('@')[0] : 'Gasoline';
                 
                 const { data, error } = await supabaseClient
                     .from('users')
-                    .update({ green_points: userPoints, travel_fund: userWallet })
+                    // 🌟 新增：把 inventory 也一起更新到資料庫
+                    .update({ green_points: userPoints, travel_fund: userWallet, inventory: inventory })
                     .eq('username', targetUsername);
                 
                 if (error) throw error;
