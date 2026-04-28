@@ -334,7 +334,7 @@
         const SUPABASE_KEY = 'sb_publishable_0dJ9RgOdwdkCp9g648JyLA_yQ9q7Dtb';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      // ==========================================
+    // ==========================================
         // 🌟 2. 會員系統 & 讀取雲端資料
         // ==========================================
         let currentUser = null;
@@ -361,32 +361,13 @@
         // 🌟 新增：由這個智慧開關統一判斷按鈕要幹嘛
         function toggleAuth() {
             if (currentUser) {
-                handleLogout(); // 如果有登入，按鈕就是執行登出
+                handleLogout();
             } else {
-                openModal('user-auth-modal'); // 如果沒登入，按鈕就是打開登入視窗
+                openModal('user-auth-modal');
             }
-        }
-
-      async function handleLogout() { 
-            await supabaseClient.auth.signOut(); 
-            alert("已登出！"); 
         }
 
         // 📥 讀檔函數：從資料庫把點數、錢、商品抓下來
-        async function fetchUserData(username) {
-          
-                currentUser = null;
-                document.getElementById('current-user-display').innerText = "尚未登入";
-                document.getElementById('btn-login-logout').innerText = "登入 / 註冊";
-                document.getElementById('btn-login-logout').onclick = () => openModal('user-auth-modal');
-                
-                // 登出時清空畫面資料
-                userPoints = 0; userWallet = 0; inventory = {};
-                updateWalletDisplay(); updateMailbox();
-            }
-        });
-
- // 📥 讀檔函數：從資料庫把點數、錢、商品抓下來
         async function fetchUserData(username) {
             const { data, error } = await supabaseClient
                 .from('users')
@@ -395,20 +376,18 @@
                 .single();
 
             if (data) {
-                userPoints = data.green_points || 0;    // 覆蓋本地點數
-                userWallet = data.travel_fund || 0;     // 覆蓋本地錢包
-                inventory = data.inventory || {};       // 覆蓋本地背包
-                updateWalletDisplay();                  // 刷新畫面
-                updateMailbox();                        // 刷新信箱
-                console.log("📥 讀檔成功！", data);     // ✅ 把這行收進 if 裡面
+                userPoints = data.green_points || 0;
+                userWallet = data.travel_fund || 0;
+                inventory = data.inventory || {};
+                updateWalletDisplay();
+                updateMailbox();
+                console.log("📥 讀檔成功！", data);
             } else {
-                // 如果是全新註冊的帳號，資料庫可能還沒有他，幫他建立一筆空資料
                 await supabaseClient.from('users').insert([{ username: username, green_points: 0, travel_fund: 0, inventory: {} }]);
             }
         }
-    
+
         async function handleSignup() {
-            // ... (原本的註冊邏輯不動)
             let email = document.getElementById('auth-email').value;
             let password = document.getElementById('auth-password').value;
             if(!email || !password) return alert("請填寫信箱與密碼！");
@@ -418,7 +397,6 @@
         }
 
         async function handleLogin() {
-            // ... (原本的登入邏輯不動)
             let email = document.getElementById('auth-email').value;
             let password = document.getElementById('auth-password').value;
             if(!email || !password) return alert("請填寫信箱與密碼！");
@@ -433,14 +411,12 @@
         }
 
         async function handleResetPassword() {
-            // ... (原本的忘記密碼邏輯不動)
             let email = document.getElementById('auth-email').value;
             if(!email) return alert("請先在上方輸入您的信箱，再點擊忘記密碼！");
             const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email);
             if(error) alert("❌ 發送重置信失敗：" + error.message);
             else alert("📩 密碼重置信已發送到您的信箱！");
         }
-
         // ==========================================
         // 🌟 3. 雲端存檔 (綁定當前使用者 & 存入背包商品)
         // ==========================================
