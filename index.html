@@ -42,11 +42,11 @@
             margin-bottom: 15px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
         }
         .points-pill i { color: white; background: var(--primary); border-radius: 50%; padding: 4px; font-size: 14px; }
-        .exp-section { display: flex; align-items: center; justify-content: space-between; font-weight: bold; font-size: 14px; }
+        .exp-section { display: flex; align-items: center; justify-content: space-between; font-weight: bold; font-size: 14px; position: relative;}
         .lv-text { font-size: 22px; font-weight: 900; color: #333; margin-right: 10px; }
         .exp-bar-container { flex: 1; background: #666; height: 12px; border-radius: 6px; overflow: hidden; position: relative; }
         #mascot-exp-bar { height: 100%; background: var(--primary); width: 0%; transition: 0.5s; }
-        .exp-text { font-size: 12px; text-align: right; margin-top: 5px; color: #333; position: absolute; right: 20px; top: 80px; }
+        .exp-text { font-size: 12px; text-align: right; margin-top: 5px; color: #333; position: absolute; right: 0; top: 15px; }
 
         /* --- 分頁系統 --- */
         .tab-content { flex: 1; display: none; overflow-y: auto; padding-bottom: 80px; }
@@ -54,13 +54,16 @@
 
         /* 🏠 首頁 Tab */
         #tab-home { background: var(--bg-mint); position: relative; overflow: hidden; }
-        .mascot-area { flex: 1; display: flex; justify-content: center; align-items: center; z-index: 5; margin-bottom: 120px; }
+        .mascot-area { flex: 1; display: flex; justify-content: center; align-items: center; z-index: 5; margin-bottom: 150px; }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
         #mascot-img { width: 280px; height: auto; object-fit: contain; animation: float 4s ease-in-out infinite; }
-        .ground-area { position: absolute; bottom: 0; width: 100%; height: 180px; background-color: var(--bg-brown); z-index: 1; border-top: 10px solid #7a5a3e; }
-        .action-buttons { position: absolute; bottom: 20px; width: 100%; display: flex; justify-content: center; gap: 15px; padding: 0 15px; box-sizing: border-box; z-index: 10; }
-        .action-btn { background: white; border-radius: 15px; width: 100px; height: 100px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2); cursor: pointer; border: none; }
-        .action-btn i { font-size: 35px; color: var(--primary); margin-bottom: 8px; }
+        
+        /* 🌟 修正：拉高泥土地，把按鈕往上推 */
+        .ground-area { position: absolute; bottom: 0; width: 100%; height: 210px; background-color: var(--bg-brown); z-index: 1; border-top: 10px solid #7a5a3e; }
+        .action-buttons { position: absolute; bottom: 95px; width: 100%; display: flex; justify-content: center; gap: 12px; padding: 0 15px; box-sizing: border-box; z-index: 10; }
+        
+        .action-btn { background: white; border-radius: 15px; width: 105px; height: 95px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2); cursor: pointer; border: none; }
+        .action-btn i { font-size: 32px; color: var(--primary); margin-bottom: 8px; }
         .action-btn span { font-size: 13px; font-weight: bold; color: var(--primary-dark); }
 
         /* 🗺️ 探索 Tab */
@@ -92,11 +95,11 @@
 
         /* --- 共用元件與彈出視窗 --- */
         select, input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
-        button.btn-primary { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; width: 100%; font-size: 15px; }
+        button.btn-primary { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; width: 100%; font-size: 15px; cursor: pointer;}
         
         .modal-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 200; justify-content: center; align-items: center; border-radius: 32px; }
         .modal-content { background: white; padding: 20px; border-radius: 16px; width: 85%; max-height: 80%; overflow-y: auto; position: relative; box-sizing: border-box; }
-        .close-btn { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 24px; color: #888; }
+        .close-btn { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 24px; color: #888; cursor: pointer; }
         
         .wardrobe-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
         .wardrobe-slot { background: #f5f5f5; border: 2px dashed #ccc; height: 100px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #999; font-size: 12px; }
@@ -108,6 +111,7 @@
 
     <div id="app-container">
         
+        <!-- 頂部狀態列 -->
         <div class="top-bar">
             <div class="points-pill">
                 <i class="fa-solid fa-leaf"></i>
@@ -118,15 +122,18 @@
                 <div class="exp-bar-container">
                     <div id="mascot-exp-bar"></div>
                 </div>
+                <div id="mascot-exp-text" class="exp-text">EX 0/1000</div>
             </div>
-            <div id="mascot-exp-text" class="exp-text">EX 0/1000</div>
         </div>
 
+        <!-- 🏠 首頁 Tab -->
         <div id="tab-home" class="tab-content active">
             <div class="mascot-area">
-                <img id="mascot-img" src="https://api.dicebear.com/7.x/shapes/svg?seed=LUTU_Mascot&backgroundColor=transparent" alt="LUTU 兔兔">
+                <!-- 🌟 修正：換成一個不會跑版、提醒你放圖的佔位圖 -->
+              <img id="mascot-img" src="rabbit.png" alt="LUTU 兔兔">
             </div>
             <div class="ground-area"></div>
+            <!-- 🌟 修正：這排按鈕已經提高，不會被底部蓋住了 -->
             <div class="action-buttons">
                 <button class="action-btn" onclick="openModal('itinerary-modal')">
                     <i class="fa-solid fa-book-open"></i>
@@ -143,8 +150,9 @@
             </div>
         </div>
 
+        <!-- 🗺️ 探索 Tab -->
         <div id="tab-explore" class="tab-content">
-            <h3 style="color: var(--primary-dark);"><i class="fa-solid fa-compass"></i> 行程規劃</h3>
+            <h3 style="color: var(--primary-dark); margin-top: 0;"><i class="fa-solid fa-compass"></i> 行程規劃</h3>
             <div class="card">
                 <select id="recommended-itinerary-select" onchange="loadSelectedRecommended()">
                     <option value="">-- 載入精選低碳行程 --</option>
@@ -173,8 +181,9 @@
             </div>
         </div>
 
+        <!-- 🛒 商城 Tab -->
         <div id="tab-shop" class="tab-content">
-            <h3 style="color: #1976D2;"><i class="fa-solid fa-store"></i> 旅遊金商城</h3>
+            <h3 style="color: #1976D2; margin-top: 0;"><i class="fa-solid fa-store"></i> 旅遊金商城</h3>
             <div class="shop-wallet">
                 💰 餘額：<span id="wallet-display">0</span> 元<br>
                 <button class="btn-primary" style="background: #f57f17; padding: 8px; font-size: 13px; margin-top: 8px;" onclick="redeemCash()">💳 1000綠能點 換 100元</button>
@@ -182,6 +191,7 @@
             <div id="shop-list-container"></div>
         </div>
 
+        <!-- 👤 個人 Tab -->
         <div id="tab-profile" class="tab-content">
             <div id="auth-section">
                 <div class="profile-header">
@@ -211,6 +221,7 @@
             </div>
         </div>
 
+        <!-- 底部導覽列 -->
         <div class="bottom-nav">
             <div class="nav-item active" onclick="switchTab('home')">
                 <i class="fa-solid fa-house"></i><span>首頁</span>
@@ -226,13 +237,18 @@
             </div>
         </div>
 
+        <!-- ========================================== -->
+        <!-- 彈出視窗 (Modals) -->
+        <!-- ========================================== -->
+
+        <!-- 📖 旅行手冊 Modal -->
         <div class="modal-overlay" id="itinerary-modal">
             <div class="modal-content" style="background-color: #f7f9fa;">
                 <button class="close-btn" onclick="closeModal('itinerary-modal')">×</button>
                 <h3 style="color: var(--primary-dark); margin-top: 0;"><i class="fa-solid fa-book-open"></i> 我的旅行手冊</h3>
                 
                 <div class="card" style="padding: 12px; margin-bottom: 10px; border-left: 4px solid var(--primary);">
-                    <h4 style="margin: 0 0 10px 0; color: #444;"><i class="fa-solid fa-route"></i> 行程表 (自動同步探索)</h4>
+                    <h4 style="margin: 0 0 10px 0; color: #444;"><i class="fa-solid fa-route"></i> 行程表 (同步探索)</h4>
                     <div id="itinerary-list-display" style="font-size: 13px; color: #666; line-height: 1.8;">
                         尚未規劃行程，請至「探索」加入景點。
                     </div>
@@ -241,25 +257,21 @@
                 <div class="card" style="padding: 12px; margin-bottom: 10px; border-left: 4px solid #1976D2;">
                     <h4 style="margin: 0 0 10px 0; color: #444;"><i class="fa-solid fa-clipboard-check"></i> 低碳準備清單</h4>
                     <div style="font-size: 13px; display: flex; flex-direction: column; gap: 8px;">
-                        <label><input type="checkbox"> 環保杯 (解鎖在地飲品任務必備)</label>
+                        <label><input type="checkbox"> 環保杯 (解鎖飲品任務)</label>
                         <label><input type="checkbox"> 環保餐具袋</label>
-                        <label><input type="checkbox"> 個人牙刷/毛巾 (綠能旅宿不提供)</label>
-                        <label><input type="checkbox"> TPASS 實體卡或悠遊卡</label>
+                        <label><input type="checkbox"> 個人牙刷/毛巾</label>
+                        <label><input type="checkbox"> TPASS 實體卡/悠遊卡</label>
                         <label><input type="checkbox"> 輕便帆布袋</label>
                     </div>
-                </div>
-
-                <div class="card" style="padding: 12px; border-left: 4px solid #f57f17;">
-                    <h4 style="margin: 0 0 5px 0; color: #444;"><i class="fa-solid fa-wallet"></i> 預算小提醒</h4>
-                    <p style="font-size: 12px; color: #666; margin: 0;">目前累積里程預估將減少 <span style="font-weight:bold; color:var(--primary);">3.5 kg</span> 碳排。<br>多搭乘大眾運輸可賺取更多旅遊金！</p>
                 </div>
             </div>
         </div>
 
+        <!-- 🏅 在地任務 Modal -->
         <div class="modal-overlay" id="task-modal">
             <div class="modal-content">
                 <button class="close-btn" onclick="closeModal('task-modal')">×</button>
-                <h3 style="color: var(--primary); margin-top: 0;"><i class="fa-solid fa-medal"></i> 在地環保任務</h3>
+                <h3 style="color: var(--primary); margin-top: 0;"><i class="fa-solid fa-medal"></i> 在地任務</h3>
                 <select id="city-select" style="margin-bottom: 15px; font-weight: bold; color: #333;" onchange="renderTasks()">
                     <option value="新北市">新北市 (當前位置)</option>
                     <option value="台北市">台北市</option>
@@ -271,10 +283,11 @@
             </div>
         </div>
 
+        <!-- 📷 QR Scanner Modal -->
         <div class="modal-overlay" id="qr-scanner-modal">
             <div class="modal-content" style="background: #222; color: white;">
                 <button class="close-btn" style="color: white;" onclick="closeModal('qr-scanner-modal')">×</button>
-                <h4 style="color: var(--primary); margin-top: 0; text-align: center;">掃描店家活動 QR Code</h4>
+                <h4 style="color: var(--primary); margin-top: 0; text-align: center;">掃描店家 QR Code</h4>
                 <div style="width: 100%; height: 200px; background: #111; margin: 15px 0; position: relative; border: 2px dashed var(--primary); border-radius: 12px; overflow: hidden;">
                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #777; font-size: 14px; text-align: center;"><i class="fa-solid fa-qrcode" style="font-size: 40px; margin-bottom: 10px;"></i><br>相機啟動中...</div>
                     <div style="width: 100%; height: 3px; background: #00ff00; position: absolute; top: 0; left: 0; box-shadow: 0 0 12px #00ff00; animation: scanAnim 2s infinite linear;"></div>
@@ -283,13 +296,14 @@
             </div>
         </div>
 
+        <!-- 👕 衣櫥 Modal (6宮格) -->
         <div class="modal-overlay" id="wardrobe-modal">
             <div class="modal-content">
                 <button class="close-btn" onclick="closeModal('wardrobe-modal')">×</button>
                 <h3 style="color: #8e24aa; margin-top: 0;"><i class="fa-solid fa-shirt"></i> LUTU 衣櫥</h3>
-                <p style="font-size: 12px; color: #666; margin: 0;">到達指定縣市完成任務即可解鎖專屬 Skin</p>
+                <p style="font-size: 12px; color: #666; margin: 0;">到達指定縣市完成任務即可解鎖</p>
                 <div class="wardrobe-grid">
-                    <div class="wardrobe-slot active"><i class="fa-solid fa-check-circle" style="font-size: 24px; margin-bottom: 5px;"></i>基本款 (預設)</div>
+                    <div class="wardrobe-slot active"><i class="fa-solid fa-check-circle" style="font-size: 24px; margin-bottom: 5px;"></i>基本款</div>
                     <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>新北限定</div>
                     <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>台北限定</div>
                     <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>台中限定</div>
@@ -299,6 +313,7 @@
             </div>
         </div>
 
+        <!-- 🎟️ 條碼核銷 Modal -->
         <div class="modal-overlay" id="barcode-modal">
             <div class="modal-content" style="text-align: center;">
                 <button class="close-btn" onclick="closeModal('barcode-modal')">×</button>
@@ -433,4 +448,4 @@
         initRecommendedTrips(); renderShop(); updateMascot();
     </script>
 </body>
-</html>
+</html>F
