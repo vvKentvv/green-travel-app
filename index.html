@@ -89,17 +89,16 @@
         @keyframes scanAnim { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
 
         /* 旅行清單專用樣式 */
-        .check-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 14px; color: #444; }
+        .check-item { display: flex; align-items: center; gap: 10px; padding: 8px 5px; border-bottom: 1px solid #eee; font-size: 14px; color: #444; }
+        .check-item:last-child { border-bottom: none; }
         .check-item input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
-        details { background: #f9f9f9; padding: 10px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 10px;}
-        details summary { font-weight: bold; color: #1976D2; cursor: pointer; outline: none; }
-        details[open] summary { margin-bottom: 8px; border-bottom: 1px dashed #ccc; padding-bottom: 5px; }
     </style>
 </head>
 <body>
 
     <div id="app-container">
         
+        <!-- 頂部狀態列 -->
         <div class="top-bar">
             <div class="points-pill"><i class="fa-solid fa-leaf"></i><span id="points-display-main">0</span></div>
             <div class="exp-section">
@@ -195,7 +194,6 @@
                 <div class="card" style="padding: 10px 15px;">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <span style="font-weight: bold; font-size: 14px; color: #555;">📍 居住縣市</span>
-                        <!-- 全台 22 縣市 -->
                         <select id="user-city-select" onchange="saveProfileCity()" style="width: 130px; padding: 5px; font-size: 13px;">
                             <option value="基隆市">基隆市</option><option value="臺北市">臺北市</option><option value="新北市">新北市</option>
                             <option value="桃園市">桃園市</option><option value="新竹市">新竹市</option><option value="新竹縣">新竹縣</option>
@@ -273,62 +271,39 @@
             </div>
         </div>
 
-        <!-- 📖 旅行清單 Modal (強化版) -->
+        <!-- 📖 旅行手冊 Modal (全新統一清單版) -->
         <div class="modal-overlay" id="itinerary-modal">
             <div class="modal-content" style="background-color: #f7f9fa;">
                 <button class="close-btn" onclick="closeModal('itinerary-modal')">×</button>
                 <h3 style="color: var(--primary-dark); margin-top: 0;"><i class="fa-solid fa-book-open"></i> 旅行手冊</h3>
                 
                 <div class="card" style="padding: 12px; margin-bottom: 10px; border-left: 4px solid var(--primary);">
-                    <h4 style="margin: 0 0 10px 0; color: #444;"><i class="fa-solid fa-route"></i> 行程表 (同步探索)</h4>
+                    <h4 style="margin: 0 0 10px 0; color: #444;"><i class="fa-solid fa-route"></i> 當前行程</h4>
                     <div id="itinerary-list-display" style="font-size: 13px; color: #666; line-height: 1.8;">尚未規劃行程，請至「探索」加入景點。</div>
                 </div>
 
                 <div class="card" style="padding: 12px; margin-bottom: 10px; border-left: 4px solid #1976D2;">
-                    <h4 style="margin: 0 0 10px 0; color: #444;"><i class="fa-solid fa-clipboard-check"></i> 旅行清單</h4>
+                    <h4 style="margin: 0 0 10px 0; color: #444;"><i class="fa-solid fa-clipboard-check"></i> 綜合旅行清單</h4>
                     
-                    <details>
-                        <summary>一日國內輕旅行</summary>
-                        <div style="padding-top:5px;">
-                            <label class="check-item"><input type="checkbox"> 手機 (行動電源、充電線)</label>
-                            <label class="check-item"><input type="checkbox"> 錢包 (信用卡、重要證件)</label>
-                            <label class="check-item"><input type="checkbox"> 鑰匙</label>
-                            <label class="check-item"><input type="checkbox"> 面紙</label>
-                            <label class="check-item"><input type="checkbox"> 悠遊卡 (捷運、ubike輕鬆刷)</label>
-                            <label class="check-item"><input type="checkbox"> 摺疊傘 (可遮陽、可擋雨)</label>
-                            <label class="check-item"><input type="checkbox"> 小水瓶 (環保杯買飲料享優惠)</label>
-                        </div>
-                    </details>
-
-                    <details>
-                        <summary>兩天一夜 微旅行</summary>
-                        <div style="padding-top:5px;">
-                            <label class="check-item"><input type="checkbox"> 1件褲子 (較耐髒為基本)</label>
-                            <label class="check-item"><input type="checkbox"> 1-2件上衣</label>
-                            <label class="check-item"><input type="checkbox"> 內衣褲、襪子</label>
-                            <label class="check-item"><input type="checkbox"> 手機充電插頭</label>
-                            <label class="check-item"><input type="checkbox"> 藥品 (常備藥)</label>
-                            <label class="check-item"><input type="checkbox"> 盥洗用品、衛生用品</label>
-                            <label class="check-item"><input type="checkbox"> 塑膠袋 (可裝換洗衣物)</label>
-                        </div>
-                    </details>
-
-                    <details>
-                        <summary>三天兩夜 小旅行</summary>
-                        <div style="padding-top:5px;">
-                            <label class="check-item"><input type="checkbox"> 2-3件上衣</label>
-                            <label class="check-item"><input type="checkbox"> 1-2件褲子 (外出褲及睡褲)</label>
-                            <label class="check-item"><input type="checkbox"> 防曬防寒外套</label>
-                            <label class="check-item"><input type="checkbox"> 內衣褲、襪子</label>
-                            <label class="check-item"><input type="checkbox"> 戶外拖鞋</label>
-                            <label class="check-item"><input type="checkbox"> 盥洗用品</label>
-                            <label class="check-item"><input type="checkbox"> 衛生用品</label>
-                            <label class="check-item"><input type="checkbox"> 相機、充電器</label>
-                        </div>
-                    </details>
+                    <div style="padding-top:5px; max-height: 220px; overflow-y: auto;">
+                        <label class="check-item"><input type="checkbox"> 手機 (行動電源、充電線)</label>
+                        <label class="check-item"><input type="checkbox"> 錢包 (信用卡、重要證件)</label>
+                        <label class="check-item"><input type="checkbox"> 鑰匙</label>
+                        <label class="check-item"><input type="checkbox"> 悠遊卡 (捷運、YouBike輕鬆刷)</label>
+                        <label class="check-item"><input type="checkbox"> 環保小水瓶 (買飲料享優惠)</label>
+                        <label class="check-item"><input type="checkbox"> 摺疊傘 (可遮陽、可擋雨)</label>
+                        <label class="check-item"><input type="checkbox"> 面紙 / 濕紙巾</label>
+                        <label class="check-item"><input type="checkbox"> 換洗衣物 (上衣、褲子、內衣褲、襪子)</label>
+                        <label class="check-item"><input type="checkbox"> 防曬防寒外套</label>
+                        <label class="check-item"><input type="checkbox"> 盥洗 / 衛生用品</label>
+                        <label class="check-item"><input type="checkbox"> 個人藥品 (常備藥)</label>
+                        <label class="check-item"><input type="checkbox"> 備用塑膠袋 (裝垃圾或換洗衣物)</label>
+                        <label class="check-item"><input type="checkbox"> 戶外拖鞋</label>
+                        <label class="check-item"><input type="checkbox"> 相機 (含充電器)</label>
+                    </div>
 
                     <!-- 一鍵重置按鈕 -->
-                    <button class="btn-primary" onclick="resetChecklist()" style="background:#666; margin-top:10px; font-size:13px; padding: 8px;">🧹 重置所有打勾</button>
+                    <button class="btn-primary" onclick="resetChecklist()" style="background:#666; margin-top:15px; font-size:13px; padding: 8px;">🧹 重置所有打勾</button>
                 </div>
             </div>
         </div>
@@ -417,7 +392,7 @@
                 const d = JSON.parse(saved);
                 userPoints = d.points || 0;
                 userExp = d.exp || 0;
-                userCo2 = d.co2 || 0; // 讀取減碳量
+                userCo2 = d.co2 || 0;
                 inventory = d.inv || {};
                 userCity = d.city || "新北市";
                 if(d.friends) myFriends = d.friends;
@@ -428,7 +403,6 @@
 
         async function fetchUserData(username) {
             isSyncing = true;
-            // 🌟 包含 co2_saved
             const { data, error } = await supabaseClient.from('users').select('*, co2_saved').eq('username', username).single();
             if (data) {
                 userPoints = data.green_points || 0;
@@ -450,7 +424,6 @@
             saveLocalData();
             if(!currentUser || isSyncing) return;
             const t = currentUser.email.split('@')[0];
-            // 🌟 存檔包含 co2_saved
             await supabaseClient.from('users').update({ green_points: userPoints, exp: userExp, co2_saved: userCo2, inventory: inventory, friends: myFriends, city: userCity }).eq('username', t);
         }
 
@@ -522,7 +495,7 @@
 
         function updateMascot() {
             let name = document.getElementById('mascot-name'), expBar = document.getElementById('mascot-exp-bar'), expText = document.getElementById('mascot-exp-text');
-            document.getElementById('points-display-main').innerText = userPoints; // 碳幣顯示
+            document.getElementById('points-display-main').innerText = userPoints; 
 
             let lv = 1, reqXpList = [100, 250, 600, 1500, 3750, 9375], currentReq = reqXpList[0], startXp = 0;
             for (let i = 0; i < 99; i++) {
@@ -561,7 +534,7 @@
         function buyItem(cost, name, icon) { 
             let reqPoints = cost * 10;
             if(userPoints >= reqPoints) { 
-                userPoints -= reqPoints; // 🌟 只扣錢不扣經驗值
+                userPoints -= reqPoints; 
                 inventory[name] ? inventory[name].count++ : inventory[name]={count:1, icon:icon}; 
                 syncDataToCloud(); refreshAllUI(); alert("兌換成功！已發送至您的信箱。"); 
             } else { alert(`碳幣不足！需要 ${reqPoints} 碳幣 (您目前有 ${userPoints})。`); } 
@@ -598,7 +571,6 @@
             let list = document.getElementById('leaderboard-list'); 
             list.innerHTML = '<div style="text-align:center; padding:20px; color:#999;"><i class="fa-solid fa-spinner fa-spin"></i> 正在向伺服器同步資料中...</div>';
             
-            // 🌟 1. 向資料庫發起真實請求 (無造假)
             const { data, error } = await supabaseClient.from('users').select('username, exp, green_points, city, co2_saved');
             
             if (error || !data) {
@@ -609,14 +581,12 @@
             let users = data;
             let myName = currentUser ? currentUser.email.split('@')[0] : '訪客';
 
-            // 🌟 2. 依照「好友模式」或「各縣市」過濾資料
             if (currentRankMode === 'friend') {
                 users = users.filter(u => myFriends.includes(u.username) || u.username === myName);
             } else if (cat === 'lv_city') {
                 users = users.filter(u => u.city === citySel.value);
             }
 
-            // 🌟 3. 排序資料：減碳使用真實 co2_saved 排序，等級使用 exp 排序
             if (cat.includes('co2')) {
                 users.sort((a, b) => (b.co2_saved || 0) - (a.co2_saved || 0));
             } else {
@@ -629,13 +599,12 @@
                 return;
             }
 
-            // 🌟 4. 渲染出真實排名卡片
             users.forEach((u, i) => {
                 let displayName = u.username === myName ? `${u.username} (你)` : u.username;
                 let score = 0, unit = "";
                 
                 if(cat.includes('co2')) { 
-                    score = (u.co2_saved || 0).toFixed(2); // 顯示真實減碳公斤數
+                    score = (u.co2_saved || 0).toFixed(2); 
                     unit = " kg"; 
                 } else { 
                     let lv = 1, reqXpList = [100, 250, 600, 1500, 3750, 9375], currentReq = reqXpList[0], startXp = 0;
@@ -679,7 +648,6 @@
             
             let c = document.getElementById('task-list-container'); c.innerHTML = ""; 
             let tasks = [];
-            // 🌟 10:1 雙軌獎勵設定 (exp, coin)
             if(city === "新北市") tasks = [{ name: "八里左岸自行車道打卡", exp: 150, coin: 15, reward: "☕ 八里咖啡券" }, { name: "淡水老街不用塑膠袋", exp: 100, coin: 10, reward: "🎟️ 淡水阿給折價券" }];
             else if(city === "臺北市") tasks = [{ name: "搭乘捷運至陽明山", exp: 200, coin: 20, reward: "🌿 限定明信片" }, { name: "自備杯至大稻埕", exp: 80, coin: 8, reward: "🥤 飲品折價券" }];
             else if(city === "臺中市") tasks = [{ name: "參觀歌劇院不索取紙本導覽", exp: 100, coin: 10, reward: "🎭 歌劇院專屬 Skin" }];
@@ -743,11 +711,10 @@
             if(idx>0 && routeLegsData.length>0) { 
                 let s = document.getElementById(`leg-trans-${idx-1}`); 
                 if(s) {
-                    let dist = routeLegsData[idx-1].distance; // 活動數據 (距離)
-                    let factor = parseFloat(s.options[s.selectedIndex].getAttribute('data-co2')); // 交通工具碳係數
+                    let dist = routeLegsData[idx-1].distance; 
+                    let factor = parseFloat(s.options[s.selectedIndex].getAttribute('data-co2')); 
                     
                     expRw = Math.floor(dist * parseFloat(s.options[s.selectedIndex].getAttribute('data-pts'))); 
-                    // 🌟 核心：真實減碳公式 (距離 * (汽車基準係數 0.14 - 該工具係數))
                     co2Rw = dist * (0.14 - factor); 
                 }
             } 
@@ -756,7 +723,7 @@
             let coinRw = Math.floor(expRw / 10); 
             userExp += expRw; 
             userPoints += coinRw; 
-            userCo2 += co2Rw; // 🌟 存入獨立減碳變數
+            userCo2 += co2Rw; 
             
             alert(`抵達！\n獲得：+${expRw} 經驗 | +${coinRw} 碳幣\n🌱 減少碳排：${co2Rw.toFixed(2)} kg`); 
             syncDataToCloud(); updateDynamicDisplays(); refreshAllUI(); 
@@ -786,7 +753,6 @@
         }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // 啟動初始化
         initRecommendedTrips(); renderShop(); loadLocalData();
     </script>
 </body>
