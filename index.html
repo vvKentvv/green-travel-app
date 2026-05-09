@@ -341,6 +341,9 @@
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let currentUser = null;
+let userPoints = 0;     // 新增：宣告綠能點數預設為 0
+let userWallet = 0;     // 新增：宣告旅遊金錢包預設為 0
+let inventory = {};     // 新增：宣告背包物品預設為空
 
         supabaseClient.auth.onAuthStateChange(async (event, session) => {
             if (session && session.user) {
