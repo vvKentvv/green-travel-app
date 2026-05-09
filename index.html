@@ -17,7 +17,6 @@
         
         #app-container { width: 390px; height: 844px; background-color: var(--bg-mint); position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-radius: 40px; border: 8px solid #111; display: flex; flex-direction: column; }
         
-        /* 頂部狀態列 */
         .top-bar { padding: 40px 20px 10px; z-index: 10; background: var(--bg-mint); }
         .points-pill { background: rgba(255, 255, 255, 0.5); border: 2px solid var(--primary-dark); border-radius: 20px; padding: 5px 15px; display: flex; align-items: center; justify-content: space-between; font-weight: bold; font-size: 18px; color: #111; margin-bottom: 15px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
         .points-pill i { color: white; background: var(--primary); border-radius: 50%; padding: 4px; font-size: 14px; }
@@ -27,7 +26,6 @@
         #mascot-exp-bar { height: 100%; background: var(--primary); width: 0%; transition: 0.5s; }
         .exp-text { font-size: 12px; text-align: right; margin-top: 5px; color: #333; position: absolute; right: 0; top: 15px; }
 
-        /* 分頁與主畫面 */
         .tab-content { flex: 1; display: none; overflow-y: auto; padding-bottom: 80px; }
         .tab-content.active { display: flex; flex-direction: column; }
         #tab-home { background: var(--bg-mint); position: relative; overflow: hidden; }
@@ -44,7 +42,6 @@
         .action-btn i { font-size: 32px; color: var(--primary); margin-bottom: 8px; }
         .action-btn span { font-size: 13px; font-weight: bold; color: var(--primary-dark); }
 
-        /* 其他分頁共用卡片與列表 */
         #tab-explore, #tab-shop, #tab-profile { background: #f0f4f8; padding: 15px; box-sizing: border-box; }
         #map { width: 100%; height: 280px; border-radius: 12px; border: 2px solid #ddd; margin: 10px 0; z-index: 1; }
         .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
@@ -58,13 +55,11 @@
         .mailbox-item { background: #e3f2fd; padding: 12px 15px; border-radius: 8px; margin-bottom: 8px; border-left: 5px solid #1976D2; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05);}
         .btn-orange { background: #f57f17; color: white; border: none; padding: 6px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;}
         
-        /* 底部導覽列 */
         .bottom-nav { position: absolute; bottom: 0; width: 100%; height: 75px; background: white; display: flex; justify-content: space-around; align-items: center; box-shadow: 0 -2px 15px rgba(0,0,0,0.1); border-bottom-left-radius: 32px; border-bottom-right-radius: 32px; z-index: 100; }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #bbb; font-size: 12px; cursor: pointer; gap: 4px; width: 60px; }
         .nav-item.active { color: var(--primary); font-weight: bold; }
         .nav-item i { font-size: 24px; }
 
-        /* 彈窗與共用表單 */
         select, input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: inherit;}
         button.btn-primary { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; width: 100%; font-size: 15px; cursor: pointer; transition: 0.2s; }
         button.btn-primary:disabled { background: #aaa; cursor: not-allowed; }
@@ -87,6 +82,11 @@
         .friend-item { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px; margin-bottom: 8px; border-radius: 8px; border: 1px solid #eee; box-shadow: 0 1px 3px rgba(0,0,0,0.02);}
 
         @keyframes scanAnim { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
+
+        /* 旅行手冊摺疊選單樣式 */
+        details { background: #f9f9f9; padding: 10px; border-radius: 8px; border: 1px solid #eee; }
+        details summary { font-weight: bold; color: #1976D2; cursor: pointer; outline: none; }
+        details[open] summary { margin-bottom: 8px; border-bottom: 1px dashed #ccc; padding-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -102,16 +102,15 @@
             </div>
         </div>
 
+        <!-- 🏠 首頁 Tab -->
         <div id="tab-home" class="tab-content active">
             <div class="mascot-area">
               <img id="mascot-img" src="lutu.png" alt="LUTU 兔兔" onerror="this.src='https://dummyimage.com/280x300/cde6d5/3e8e2e.png&text=請放入去背圖'">
             </div>
-            
             <div class="side-buttons">
                 <button class="side-btn" onclick="openLeaderboard()"><i class="fa-solid fa-trophy"></i></button>
                 <button class="side-btn" onclick="openFriends()"><i class="fa-solid fa-user-group"></i></button>
             </div>
-
             <div class="ground-area"></div>
             <div class="action-buttons">
                 <button class="action-btn" onclick="openModal('itinerary-modal')"><i class="fa-solid fa-book-open"></i><span>旅行手冊</span></button>
@@ -120,6 +119,7 @@
             </div>
         </div>
 
+        <!-- 🗺️ 探索 Tab -->
         <div id="tab-explore" class="tab-content">
             <h3 style="color: var(--primary-dark); margin-top: 0;"><i class="fa-solid fa-compass"></i> 行程規劃</h3>
             <div class="card">
@@ -135,7 +135,6 @@
                     <button class="btn-primary" style="background: #d32f2f; width: 60px;" onclick="clearMap()">清空</button>
                 </div>
             </div>
-
             <div class="card">
                 <h4 style="margin: 0 0 10px 0;">導航與結算</h4>
                 <div class="input-group">
@@ -148,6 +147,7 @@
             </div>
         </div>
 
+        <!-- 🛒 商城 Tab -->
         <div id="tab-shop" class="tab-content">
             <h3 style="color: #1976D2; margin-top: 0;"><i class="fa-solid fa-store"></i> 經濟循環：讓環保變現金</h3>
             <div class="shop-wallet">
@@ -157,6 +157,7 @@
             <div id="shop-list-container"></div>
         </div>
 
+        <!-- 👤 個人 Tab -->
         <div id="tab-profile" class="tab-content">
             <div id="auth-section">
                 <div class="profile-header">
@@ -171,14 +172,12 @@
                     <button class="btn-primary" onclick="handleSignup()">註冊新帳號</button>
                 </div>
             </div>
-
             <div id="user-info-section" style="display: none;">
                 <div class="profile-header">
                     <div class="profile-avatar"><i class="fa-solid fa-user"></i></div>
                     <h3 id="profile-nickname" style="margin-bottom: 5px;">你好, User</h3>
                     <button class="btn-primary" style="background: #d32f2f; padding: 6px; width: 100px; font-size: 12px; margin-top: 10px;" onclick="handleLogout()">登出</button>
                 </div>
-                
                 <div class="card" style="padding: 10px 15px;">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <span style="font-weight: bold; font-size: 14px; color: #555;">📍 居住縣市</span>
@@ -194,7 +193,6 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="card">
                     <h4 style="margin: 0 0 10px 0; color: #1976D2;"><i class="fa-solid fa-ticket"></i> 我的背包 (戰利品)</h4>
                     <p style="font-size: 12px; color: #666; margin-top: 0;">點擊使用出示條碼</p>
@@ -210,6 +208,7 @@
             <div class="nav-item" onclick="switchTab('profile')"><i class="fa-solid fa-user"></i><span id="nav-user-text">個人</span></div>
         </div>
 
+        <!-- 🏆 排行榜 Modal -->
         <div class="modal-overlay" id="leaderboard-modal">
             <div class="modal-content" style="background-color: #f4f6f8; min-height: 480px;">
                 <button class="close-btn" onclick="closeModal('leaderboard-modal')">×</button>
@@ -225,7 +224,6 @@
                     <option value="co2_month">4. 1個月份減碳排行</option>
                     <option value="co2_week">5. 1週份減碳排行</option>
                 </select>
-                
                 <select id="rank-city-select" onchange="renderLeaderboard()" style="margin-bottom: 15px;">
                     <option value="基隆市">基隆市</option><option value="臺北市">臺北市</option><option value="新北市" selected>新北市</option>
                     <option value="桃園市">桃園市</option><option value="新竹市">新竹市</option><option value="新竹縣">新竹縣</option>
@@ -236,11 +234,11 @@
                     <option value="臺東縣">臺東縣</option><option value="澎湖縣">澎湖縣</option><option value="金門縣">金門縣</option>
                     <option value="連江縣">連江縣</option>
                 </select>
-                
                 <div id="leaderboard-list" style="max-height: 280px; overflow-y: auto; padding-right: 5px;"></div>
             </div>
         </div>
 
+        <!-- 👥 好友管理 Modal -->
         <div class="modal-overlay" id="friends-modal">
             <div class="modal-content" style="background-color: #f4f6f8;">
                 <button class="close-btn" onclick="closeModal('friends-modal')">×</button>
@@ -254,24 +252,53 @@
             </div>
         </div>
 
+        <!-- 📖 旅行手冊 Modal (全新行李清單排版) -->
         <div class="modal-overlay" id="itinerary-modal">
             <div class="modal-content" style="background-color: #f7f9fa;">
                 <button class="close-btn" onclick="closeModal('itinerary-modal')">×</button>
                 <h3 style="color: var(--primary-dark); margin-top: 0;"><i class="fa-solid fa-book-open"></i> 我的旅行手冊</h3>
+                
                 <div class="card" style="padding: 12px; margin-bottom: 10px; border-left: 4px solid var(--primary);">
                     <h4 style="margin: 0 0 10px 0; color: #444;"><i class="fa-solid fa-route"></i> 行程表 (同步探索)</h4>
                     <div id="itinerary-list-display" style="font-size: 13px; color: #666; line-height: 1.8;">尚未規劃行程，請至「探索」加入景點。</div>
                 </div>
+
                 <div class="card" style="padding: 12px; margin-bottom: 10px; border-left: 4px solid #1976D2;">
-                    <h4 style="margin: 0 0 10px 0; color: #444;"><i class="fa-solid fa-clipboard-check"></i> 低碳準備清單</h4>
-                    <div style="font-size: 13px; display: flex; flex-direction: column; gap: 8px;">
-                        <label><input type="checkbox"> 環保杯 (解鎖飲品任務)</label><label><input type="checkbox"> 環保餐具袋</label>
-                        <label><input type="checkbox"> 個人牙刷/毛巾</label><label><input type="checkbox"> TPASS 實體卡/悠遊卡</label>
-                    </div>
+                    <h4 style="margin: 0 0 10px 0; color: #444;"><i class="fa-solid fa-clipboard-check"></i> 旅行清單</h4>
+                    
+                    <details style="margin-bottom: 10px;">
+                        <summary>行李清單1：一日國內輕旅行</summary>
+                        <div style="font-size:12px; color:#555; line-height:1.5; padding-top:5px;">
+                            一日輕旅行主打「輕便自在」，許多人喜歡去爬阿里山，晚上逛夜市也是台灣必遊行程。這種時候可以攜帶貴重個人物品為主：<br>
+                            ◆ 手機（行動電源、充電線）<br>◆ 錢包（信用卡、重要證件）<br>◆ 鑰匙<br>◆ 面紙<br>
+                            ◆ 悠遊卡（捷運、ubike輕鬆刷）<br>◆ 摺疊傘（可遮陽、可擋雨）<br>◆ 小水瓶（環保杯買飲料還可享優惠）<br>
+                            <span style="color:#888; display:block; margin-top:5px;">想要輕便自在，卻能輕鬆攜帶以上物品嗎？其實你只需要一款輕量後背包就能搞定，盡量選擇輕量化的設計，說走就走，需要什麼也能隨時拿取！</span>
+                        </div>
+                    </details>
+
+                    <details style="margin-bottom: 10px;">
+                        <summary>行李清單2：兩天一夜 微旅行</summary>
+                        <div style="font-size:12px; color:#555; line-height:1.5; padding-top:5px;">
+                            你知道嗎？日月潭被知名旅遊網站票選為「全台兩天一夜景點首選」喔！兩天一夜的微旅行需要攜帶換洗衣物，可以選擇中型的後背包，除了前文所述的基本物品，還有以下行李需要準備：<br>
+                            ◆ 1件褲子（褲子較耐髒，可以一件為基本）<br>◆ 1 – 2件上衣（可視旅遊季節決定上衣類型）<br>
+                            ◆ 內衣褲、襪子<br>◆ 手機充電插頭<br>◆ 藥品（常備藥）<br>◆ 盥洗用品、衛生用品<br>◆ 塑膠袋（可裝換洗衣物）<br>
+                            <span style="color:#888; display:block; margin-top:5px;">若能有效收納換洗衣物，不用行李箱也能輕鬆旅行！一款容量足夠、隔層夠多的後背包，就能滿足你的所有需求！將行李背在身後，解放雙手，也更方便拍照、購物喔！</span>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>行李清單3：三天兩夜 小旅行</summary>
+                        <div style="font-size:12px; color:#555; line-height:1.5; padding-top:5px;">
+                            辛苦工作與照顧家庭，你也想來場溫泉之旅嗎？面對三天以上的旅行，多數人選擇攜帶一卡小行李箱，或是後背包加上斜背包的形式。以下也提供三天兩夜旅行還需要帶的行李：<br>
+                            ◆ 2 – 3件上衣（可視旅遊季節決定上衣類型）<br>◆ 1 – 2件褲子（可同時準備外出褲以及睡褲）<br>
+                            ◆ 防曬防寒外套<br>◆ 內衣褲、襪子<br>◆ 戶外拖鞋<br>◆ 盥洗用品<br>◆ 衛生用品<br>◆ 相機、充電器
+                        </div>
+                    </details>
                 </div>
             </div>
         </div>
 
+        <!-- 🏅 在地任務 Modal -->
         <div class="modal-overlay" id="task-modal">
             <div class="modal-content" style="background-color: #f4f6f8;">
                 <button class="close-btn" onclick="closeModal('task-modal')">×</button>
@@ -306,7 +333,6 @@
             <div class="modal-content">
                 <button class="close-btn" onclick="closeModal('wardrobe-modal')">×</button>
                 <h3 style="color: #8e24aa; margin-top: 0;"><i class="fa-solid fa-shirt"></i> LUTU 衣櫥</h3>
-                <p style="font-size: 12px; color: #666; margin: 0;">到達指定縣市完成任務即可解鎖</p>
                 <div class="wardrobe-grid">
                     <div class="wardrobe-slot active"><i class="fa-solid fa-check-circle" style="font-size: 24px; margin-bottom: 5px;"></i>基本款</div>
                     <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>新北限定</div>
@@ -335,14 +361,15 @@
 
         let currentUser = null;
         let userPoints = 0; 
-        let userExp = 0;    
+        let userExp = 0;
+        let userCo2 = 0; // 🌟 獨立的減碳量變數 (單位: kg)
         let inventory = {}; 
         let userCity = "新北市"; 
-        let myFriends = []; // 預設不再給假好友，真實抓取
+        let myFriends = [];
         let isSyncing = false; 
 
         function saveLocalData() {
-            localStorage.setItem('lutu_data', JSON.stringify({ points: userPoints, exp: userExp, inv: inventory, friends: myFriends, city: userCity }));
+            localStorage.setItem('lutu_data', JSON.stringify({ points: userPoints, exp: userExp, co2: userCo2, inv: inventory, friends: myFriends, city: userCity }));
         }
 
         function loadLocalData() {
@@ -351,6 +378,7 @@
                 const d = JSON.parse(saved);
                 userPoints = d.points || 0;
                 userExp = d.exp || 0;
+                userCo2 = d.co2 || 0;
                 inventory = d.inv || {};
                 userCity = d.city || "新北市";
                 if(d.friends) myFriends = d.friends;
@@ -361,16 +389,18 @@
 
         async function fetchUserData(username) {
             isSyncing = true;
-            const { data, error } = await supabaseClient.from('users').select('*').eq('username', username).single();
+            // 🌟 加入 co2_saved 欄位的讀取
+            const { data, error } = await supabaseClient.from('users').select('*, co2_saved').eq('username', username).single();
             if (data) {
                 userPoints = data.green_points || 0;
                 userExp = data.exp || 0;
+                userCo2 = data.co2_saved || 0; 
                 inventory = data.inventory || {};
                 userCity = data.city || userCity; 
                 myFriends = data.friends || myFriends;
                 saveLocalData();
             } else {
-                await supabaseClient.from('users').insert([{ username: username, green_points: userPoints, exp: userExp, inventory: inventory, friends: myFriends, city: userCity }]);
+                await supabaseClient.from('users').insert([{ username: username, green_points: userPoints, exp: userExp, co2_saved: userCo2, inventory: inventory, friends: myFriends, city: userCity }]);
             }
             document.getElementById('user-city-select').value = userCity;
             isSyncing = false;
@@ -381,7 +411,8 @@
             saveLocalData();
             if(!currentUser || isSyncing) return;
             const t = currentUser.email.split('@')[0];
-            await supabaseClient.from('users').update({ green_points: userPoints, exp: userExp, inventory: inventory, friends: myFriends, city: userCity }).eq('username', t);
+            // 🌟 存檔時包含 co2_saved
+            await supabaseClient.from('users').update({ green_points: userPoints, exp: userExp, co2_saved: userCo2, inventory: inventory, friends: myFriends, city: userCity }).eq('username', t);
         }
 
         supabaseClient.auth.onAuthStateChange((event, session) => {
@@ -415,7 +446,7 @@
 
         async function handleLogout() {
             await supabaseClient.auth.signOut();
-            userPoints = 0; userExp = 0; inventory = {}; myFriends = [];
+            userPoints = 0; userExp = 0; userCo2 = 0; inventory = {}; myFriends = [];
             localStorage.removeItem('lutu_data');
             refreshAllUI();
             alert("已登出！系統切換回空本機模式。");
@@ -476,10 +507,9 @@
         function confirmConsumeTicket() { if(inventory[itemToConsume]) { inventory[itemToConsume].count--; if(inventory[itemToConsume].count<=0) delete inventory[itemToConsume]; syncDataToCloud(); refreshAllUI(); closeModal('barcode-modal'); alert("核銷成功");} }
 
         // ==========================================
-        // 🌟 核心更新：排行榜全自動抓取真實 Supabase 資料庫
+        // 排行榜：真實 CO2 減碳數據串接
         // ==========================================
         let currentRankMode = 'national'; 
-
         function openLeaderboard() { openModal('leaderboard-modal'); renderLeaderboard(); }
         function setRankMode(mode) { 
             currentRankMode = mode; 
@@ -496,63 +526,46 @@
             let list = document.getElementById('leaderboard-list'); 
             list.innerHTML = '<div style="text-align:center; padding:20px; color:#999;"><i class="fa-solid fa-spinner fa-spin"></i> 正在向伺服器同步資料中...</div>';
             
-            // 🌟 1. 向資料庫發起真實請求 (無造假)
-            const { data, error } = await supabaseClient.from('users').select('username, exp, green_points, city');
+            // 🌟 抓取包含 co2_saved 的雲端資料
+            const { data, error } = await supabaseClient.from('users').select('username, exp, green_points, city, co2_saved');
             
-            if (error || !data) {
-                list.innerHTML = '<div style="text-align:center; padding: 20px; color:#d32f2f;">無法取得雲端資料，請檢查網路連線。</div>';
-                return;
-            }
+            if (error || !data) { list.innerHTML = '<div style="text-align:center; padding: 20px; color:#d32f2f;">無法取得雲端資料，請檢查網路。</div>'; return; }
 
             let users = data;
             let myName = currentUser ? currentUser.email.split('@')[0] : '訪客';
 
-            // 🌟 2. 依照「好友模式」或「各縣市」過濾資料
-            if (currentRankMode === 'friend') {
-                users = users.filter(u => myFriends.includes(u.username) || u.username === myName);
-            } else if (cat === 'lv_city') {
-                users = users.filter(u => u.city === citySel.value);
-            }
+            if (currentRankMode === 'friend') { users = users.filter(u => myFriends.includes(u.username) || u.username === myName); } 
+            else if (cat === 'lv_city') { users = users.filter(u => u.city === citySel.value); }
 
-            // 🌟 3. 排序資料：如果是減碳(CO2)以 green_points 排序，如果是等級以 exp 排序
+            // 🌟 排行榜排序邏輯更新：使用真實減碳量 (co2_saved)
             if (cat.includes('co2')) {
-                users.sort((a, b) => (b.green_points || 0) - (a.green_points || 0));
+                users.sort((a, b) => (b.co2_saved || 0) - (a.co2_saved || 0));
             } else {
                 users.sort((a, b) => (b.exp || 0) - (a.exp || 0));
             }
 
             list.innerHTML = '';
-            if (users.length === 0) {
-                list.innerHTML = '<div style="text-align:center; padding: 20px; color:#999;">目前沒有資料</div>';
-                return;
-            }
+            if (users.length === 0) { list.innerHTML = '<div style="text-align:center; padding: 20px; color:#999;">目前沒有資料</div>'; return; }
 
-            // 🌟 4. 渲染出真實排名卡片
             users.forEach((u, i) => {
                 let displayName = u.username === myName ? `${u.username} (你)` : u.username;
-                
-                // 還原真實等級
-                let lv = 1, reqXpList = [100, 250, 600, 1500, 3750, 9375], currentReq = reqXpList[0], startXp = 0;
-                let userExpVal = u.exp || 0;
-                for (let j = 0; j < 99; j++) {
-                    currentReq = j < reqXpList.length ? reqXpList[j] : Math.floor(currentReq * 2.5);
-                    if (userExpVal >= startXp + currentReq) { startXp += currentReq; lv++; } else break;
-                }
-
                 let score = 0, unit = "";
+                
+                // 🌟 使用真實數據呈現
                 if(cat.includes('co2')) { 
-                    score = ((u.green_points || 0) / 10).toFixed(1); // 假設每10碳幣等於省下 1kg 碳
+                    score = (u.co2_saved || 0).toFixed(2); // 直接讀取減碳公斤數
                     unit = " kg"; 
                 } else { 
-                    score = lv; 
-                    unit = " LV"; 
+                    let lv = 1, reqXpList = [100, 250, 600, 1500, 3750, 9375], currentReq = reqXpList[0], startXp = 0;
+                    let userExpVal = u.exp || 0;
+                    for (let j = 0; j < 99; j++) {
+                        currentReq = j < reqXpList.length ? reqXpList[j] : Math.floor(currentReq * 2.5);
+                        if (userExpVal >= startXp + currentReq) { startXp += currentReq; lv++; } else break;
+                    }
+                    score = lv; unit = " LV"; 
                 }
 
-                list.innerHTML += `
-                <div class="rank-item">
-                    <span><strong class="rank-num">${i + 1}</strong> ${displayName}</span>
-                    <span style="font-weight:bold; color:#555;">${score}${unit}</span>
-                </div>`;
+                list.innerHTML += `<div class="rank-item"><span><strong class="rank-num">${i + 1}</strong> ${displayName}</span><span style="font-weight:bold; color:#555;">${score}${unit}</span></div>`;
             });
         }
 
@@ -571,30 +584,20 @@
         function removeFriend(idx) { if(confirm("確定要解除好友關係嗎？")) { myFriends.splice(idx, 1); syncDataToCloud(); renderFriendList(); } }
 
         // ==========================================
-        // 6. 在地任務系統
+        // 任務結算：經驗與碳幣 10:1
         // ==========================================
         let currentTaskExp = 0, currentTaskCoin = 0, currentTaskItem = "";
         function renderTasks() {
-            let selectElem = document.getElementById('city-select');
-            let city = selectElem.value;
+            let selectElem = document.getElementById('city-select'); let city = selectElem.value;
+            let c = document.getElementById('task-list-container'); c.innerHTML = ""; let tasks = [];
             
-            let c = document.getElementById('task-list-container'); c.innerHTML = ""; 
-            let tasks = [];
-            // 如果是在這幾個縣市，有特殊任務，其餘預設
             if(city === "新北市") tasks = [{ name: "八里左岸自行車道打卡", exp: 150, coin: 15, reward: "☕ 八里咖啡券" }, { name: "淡水老街不用塑膠袋", exp: 100, coin: 10, reward: "🎟️ 淡水阿給折價券" }];
             else if(city === "臺北市") tasks = [{ name: "搭乘捷運至陽明山", exp: 200, coin: 20, reward: "🌿 限定明信片" }, { name: "自備杯至大稻埕", exp: 80, coin: 8, reward: "🥤 飲品折價券" }];
-            else if(city === "臺中市") tasks = [{ name: "參觀歌劇院不索取紙本導覽", exp: 100, coin: 10, reward: "🎭 歌劇院專屬 Skin" }];
+            else if(city === "臺中市") tasks = [{ name: "參觀歌劇院不拿紙本導覽", exp: 100, coin: 10, reward: "🎭 歌劇院專屬 Skin" }];
             else tasks = [{ name: "低碳旅宿 Check-in", exp: 200, coin: 20, reward: "🎁 驚喜小禮" }, { name: "租借 YouBike", exp: 50, coin: 5, reward: "無" }];
             
             tasks.forEach(t => { 
-                c.innerHTML += `
-                <div class="task-item" onclick="openScanner(${t.exp}, ${t.coin}, '${t.reward}')">
-                    <div style="flex:1">
-                        <div style="font-weight:bold; font-size:15px; margin-bottom:5px;">${t.name}</div>
-                        <div style="font-size:12px; color:#888;">⭐ +${t.exp} 經驗 | 💰 +${t.coin} 碳幣 <br>🎁 獎勵：${t.reward}</div>
-                    </div>
-                    <button class="btn-primary" style="width:50px; padding:10px 5px; font-size:14px; background:#55a846; margin-left:10px;">解<br>鎖</button>
-                </div>`; 
+                c.innerHTML += `<div class="task-item" onclick="openScanner(${t.exp}, ${t.coin}, '${t.reward}')"><div style="flex:1"><div style="font-weight:bold; font-size:15px; margin-bottom:5px;">${t.name}</div><div style="font-size:12px; color:#888;">⭐ +${t.exp} 經驗 | 💰 +${t.coin} 碳幣 <br>🎁 獎勵：${t.reward}</div></div><button class="btn-primary" style="width:50px; padding:10px 5px; font-size:14px; background:#55a846; margin-left:10px;">解<br>鎖</button></div>`; 
             });
         }
         function openScanner(exp, coin, rw) { currentTaskExp = exp; currentTaskCoin = coin; currentTaskItem = rw; closeModal('task-modal'); openModal('qr-scanner-modal'); }
@@ -606,6 +609,9 @@
             syncDataToCloud(); refreshAllUI(); alert(msg); 
         }
 
+        // ==========================================
+        // 導航系統：真實公式計算減碳量 (活動數據*碳排係數)
+        // ==========================================
         const RECOMMENDED_TRIPS = [{ title: "🌿 南投日月潭 3天2夜", points: [{ lat: 24.1120, lng: 120.6160, name: "台中站" }, { lat: 23.8624, lng: 120.9118, name: "水社碼頭" }], zoomCoord: [23.95, 120.75] }, { title: "🌅 新北淡水八里 1日遊", points: [{ lat: 25.0478, lng: 121.5170, name: "台北車站" }, { lat: 25.1678, lng: 121.4456, name: "淡水站" }, { lat: 25.1824, lng: 121.4111, name: "漁人碼頭" }], zoomCoord: [25.12, 121.45] }];
         let waypoints = [], routeLegsData = [], routeLayer = null, currentDistanceKm = 0, searchMarker = null;
 
@@ -622,23 +628,35 @@
             let gd = document.getElementById('gps-waypoint-select'), itiList = document.getElementById('itinerary-list-display');
             if(waypoints.length===0) { gd.innerHTML='<option>請先定位...</option>'; gd.disabled=true; itiList.innerHTML = "尚未規劃行程。"; updateGPSButtonState(); return; } 
             gd.disabled=false; gd.innerHTML=""; let itiHTML = "";
-            waypoints.forEach((w,i) => { 
-                let n = w.customName || `景點 ${i+1}`; 
-                gd.innerHTML+=`<option value="${i}">[${w.visited?'⚫':'📍'}] ${n}</option>`; 
-                itiHTML += `<div style="margin-bottom:6px;"><i class="fa-solid fa-location-dot" style="color:var(--primary); margin-right:5px;"></i> ${n}</div>`; 
-            }); 
-            itiList.innerHTML = itiHTML;
-            updateGPSButtonState(); 
+            waypoints.forEach((w,i) => { let n = w.customName || `景點 ${i+1}`; gd.innerHTML+=`<option value="${i}">[${w.visited?'⚫':'📍'}] ${n}</option>`; itiHTML += `<div style="margin-bottom:6px;"><i class="fa-solid fa-location-dot" style="color:var(--primary); margin-right:5px;"></i> ${n}</div>`; }); 
+            itiList.innerHTML = itiHTML; updateGPSButtonState(); 
         }
         function updateGPSButtonState() { let sel = document.getElementById('gps-waypoint-select'), btn = document.getElementById('btn-gps-arrive'); if(sel.value==="") { btn.disabled=true; return; } let idx = parseInt(sel.value); if(waypoints[idx].visited) { btn.disabled=true; btn.innerText="已到達"; btn.style.background="#aaa"; } else { btn.disabled=false; btn.innerText="📍 抵達"; btn.style.background="var(--primary)"; } }
 
         function simulateArrivalAndReward() { 
             let idx = parseInt(document.getElementById('gps-waypoint-select').value); if(isNaN(idx) || waypoints[idx].visited) return; 
-            let expRw=0; if(idx>0 && routeLegsData.length>0) { let s=document.getElementById(`leg-trans-${idx-1}`); if(s) expRw=Math.floor(routeLegsData[idx-1].distance * parseFloat(s.options[s.selectedIndex].getAttribute('data-pts'))); } 
+            
+            let expRw=0, co2Rw=0; 
+            if(idx>0 && routeLegsData.length>0) { 
+                let s = document.getElementById(`leg-trans-${idx-1}`); 
+                if(s) {
+                    let dist = routeLegsData[idx-1].distance; // 活動數據
+                    let factor = parseFloat(s.options[s.selectedIndex].getAttribute('data-co2')); // 選擇的交通工具碳係數
+                    
+                    expRw = Math.floor(dist * parseFloat(s.options[s.selectedIndex].getAttribute('data-pts'))); 
+                    // 🌟 真實減碳公式：距離 * (汽車基準係數 0.14 - 該工具係數)
+                    co2Rw = dist * (0.14 - factor); 
+                }
+            } 
+            
             waypoints[idx].visited=true; 
             let coinRw = Math.floor(expRw / 10); 
-            userExp+=expRw; userPoints+=coinRw; 
-            alert(`抵達！獲得：+${expRw} 經驗 | +${coinRw} 碳幣`); syncDataToCloud(); updateDynamicDisplays(); refreshAllUI(); 
+            userExp += expRw; 
+            userPoints += coinRw; 
+            userCo2 += co2Rw; // 🌟 存入獨立減碳變數
+            
+            alert(`抵達！\n獲得：+${expRw} 經驗 | +${coinRw} 碳幣\n🌱 減少碳排：${co2Rw.toFixed(2)} kg`); 
+            syncDataToCloud(); updateDynamicDisplays(); refreshAllUI(); 
         }
 
         async function calculateMultiStopRoute() { if(waypoints.length<2) return; let coords = waypoints.map(w=>`${w.lng},${w.lat}`).join(';'); try { let res = await fetch(`https://router.project-osrm.org/route/v1/driving/${coords}?overview=full&geometries=geojson`); let data = await res.json(); if(data.code==="Ok") { currentDistanceKm = data.routes[0].distance/1000; routeLegsData = data.routes[0].legs.map(l=>({distance: l.distance/1000})); if(routeLayer) map.removeLayer(routeLayer); routeLayer = L.geoJSON(data.routes[0].geometry, {style: {color: "#1976D2", weight:5}}).addTo(map); map.fitBounds(routeLayer.getBounds()); renderLegTransportsUI(); updateResults(); } } catch(e){} }
