@@ -58,7 +58,6 @@
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
         #mascot-img { width: 280px; height: auto; object-fit: contain; animation: float 4s ease-in-out infinite; }
         
-        /* 🌟 修正：拉高泥土地，把按鈕往上推 */
         .ground-area { position: absolute; bottom: 0; width: 100%; height: 210px; background-color: var(--bg-brown); z-index: 1; border-top: 10px solid #7a5a3e; }
         .action-buttons { position: absolute; bottom: 95px; width: 100%; display: flex; justify-content: center; gap: 12px; padding: 0 15px; box-sizing: border-box; z-index: 10; }
         
@@ -122,18 +121,16 @@
                 <div class="exp-bar-container">
                     <div id="mascot-exp-bar"></div>
                 </div>
-                <div id="mascot-exp-text" class="exp-text">EX 0/1000</div>
+                <div id="mascot-exp-text" class="exp-text">EX 0/100</div>
             </div>
         </div>
 
         <!-- 🏠 首頁 Tab -->
         <div id="tab-home" class="tab-content active">
             <div class="mascot-area">
-                <!-- 🌟 修正：換成一個不會跑版、提醒你放圖的佔位圖 -->
-              <img id="mascot-img" src="rabbit.png" alt="LUTU 兔兔">
+                <img id="mascot-img" src="lutu.png" alt="LUTU 兔兔" onerror="this.src='https://dummyimage.com/280x300/cde6d5/3e8e2e.png&text=請放入去背圖'">
             </div>
             <div class="ground-area"></div>
-            <!-- 🌟 修正：這排按鈕已經提高，不會被底部蓋住了 -->
             <div class="action-buttons">
                 <button class="action-btn" onclick="openModal('itinerary-modal')">
                     <i class="fa-solid fa-book-open"></i>
@@ -172,7 +169,8 @@
             <div class="card">
                 <h4 style="margin: 0 0 10px 0;">導航與結算</h4>
                 <div class="input-group">
-                   <select id="gps-waypoint-select" disabled onchange="updateGPSButtonState()"><option>請先規劃...</option></select>
+                    <!-- 🌟 修正點：加入 onchange="updateGPSButtonState()" -->
+                    <select id="gps-waypoint-select" disabled onchange="updateGPSButtonState()"><option>請先規劃...</option></select>
                     <button id="btn-gps-arrive" class="btn-disabled" style="width: 80px;" onclick="simulateArrivalAndReward()" disabled>抵達</button>
                 </div>
                 <div id="leg-transports-container" style="font-size: 13px; color: #666; margin-top: 10px;">尚未規劃路線</div>
@@ -184,10 +182,13 @@
         <!-- 🛒 商城 Tab -->
         <div id="tab-shop" class="tab-content">
             <h3 style="color: #1976D2; margin-top: 0;"><i class="fa-solid fa-store"></i> 旅遊金商城</h3>
+            
+            <!-- 🌟 修正點：移除兌換按鈕，改為全自動顯示等值旅遊金 -->
             <div class="shop-wallet">
-                💰 餘額：<span id="wallet-display">0</span> 元<br>
-                <button class="btn-primary" style="background: #f57f17; padding: 8px; font-size: 13px; margin-top: 8px;" onclick="redeemCash()">💳 1000綠能點 換 100元</button>
+                💰 等值旅遊金：<span id="wallet-display">0</span> 元<br>
+                <span style="font-size: 12px; font-weight: normal; color: #888;">(自動轉換比例：10 綠能點 = 1 元)</span>
             </div>
+            
             <div id="shop-list-container"></div>
         </div>
 
@@ -296,7 +297,7 @@
             </div>
         </div>
 
-        <!-- 👕 衣櫥 Modal (6宮格) -->
+        <!-- 👕 衣櫥 Modal -->
         <div class="modal-overlay" id="wardrobe-modal">
             <div class="modal-content">
                 <button class="close-btn" onclick="closeModal('wardrobe-modal')">×</button>
@@ -326,6 +327,11 @@
     </div>
 
     <script>
+        // 🌟 修正點：提前宣告全域變數，防止未定義報錯
+        let currentUser = null;
+        let userPoints = 0;
+        let inventory = {};
+
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -339,11 +345,6 @@
         const SUPABASE_URL = 'https://vwoeztbwollawwojnmgz.supabase.co'; 
         const SUPABASE_KEY = 'sb_publishable_0dJ9RgOdwdkCp9g648JyLA_yQ9q7Dtb';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        let currentUser = null;
-let userPoints = 0;     // 新增：宣告綠能點數預設為 0
-let userWallet = 0;     // 新增：宣告旅遊金錢包預設為 0
-let inventory = {};     // 新增：宣告背包物品預設為空
 
         supabaseClient.auth.onAuthStateChange(async (event, session) => {
             if (session && session.user) {
@@ -359,31 +360,82 @@ let inventory = {};     // 新增：宣告背包物品預設為空
                 document.getElementById('nav-user-text').innerText = "登入";
                 document.getElementById('auth-section').style.display = 'block';
                 document.getElementById('user-info-section').style.display = 'none';
-                userPoints = 0; userWallet = 0; inventory = {};
+                userPoints = 0; inventory = {};
                 updateWalletDisplay(); updateMailbox(); updateMascot();
             }
         });
 
         async function fetchUserData(username) {
             const { data, error } = await supabaseClient.from('users').select('*').eq('username', username).single();
-            if (data) { userPoints = data.green_points || 0; userWallet = data.travel_fund || 0; inventory = data.inventory || {}; updateWalletDisplay(); updateMailbox(); updateMascot(); } 
-            else { await supabaseClient.from('users').insert([{ username: username, green_points: 0, travel_fund: 0, inventory: {} }]); }
+            if (data) { 
+                userPoints = data.green_points || 0; 
+                inventory = data.inventory || {}; 
+                updateWalletDisplay(); updateMailbox(); updateMascot(); 
+            } else { 
+                await supabaseClient.from('users').insert([{ username: username, green_points: 0, inventory: {} }]); 
+            }
         }
 
         async function handleSignup() { let e = document.getElementById('auth-email').value, p = document.getElementById('auth-password').value; if(!e||!p) return alert("請填寫！"); const { error } = await supabaseClient.auth.signUp({ email: e, password: p }); if(error) alert("❌ 失敗："+error.message); else alert("✅ 註冊成功！"); }
         async function handleLogin() { let e = document.getElementById('auth-email').value, p = document.getElementById('auth-password').value; if(!e||!p) return alert("請填寫！"); const { error } = await supabaseClient.auth.signInWithPassword({ email: e, password: p }); if(error) alert("❌ 失敗："+error.message); else alert("✅ 登入成功！"); }
-        async function handleLogout() { await supabaseClient.auth.signOut(); alert("已登出！"); switchTab('home'); }
-        async function syncDataToCloud() { try { let t = currentUser ? currentUser.email.split('@')[0] : 'Gasoline'; await supabaseClient.from('users').update({ green_points: userPoints, travel_fund: userWallet, inventory: inventory }).eq('username', t); } catch (err) {} }
+        
+        async function handleLogout() {
+            currentUser = null; userPoints = 0; inventory = {};
+            document.getElementById('auth-section').style.display = 'block';
+            document.getElementById('user-info-section').style.display = 'none';
+            document.getElementById('nav-user-text').innerText = "登入";
+            updateWalletDisplay(); updateMailbox(); updateMascot();
+            alert("已登出！"); switchTab('home');
+            supabaseClient.auth.signOut().catch(err => console.log(err));
+        }
+
+        async function syncDataToCloud() { 
+            try { 
+                let t = currentUser ? currentUser.email.split('@')[0] : 'Gasoline'; 
+                await supabaseClient.from('users').update({ green_points: userPoints, inventory: inventory }).eq('username', t); 
+            } catch (err) {} 
+        }
 
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
+        // 🌟 修正點：實裝指數型升級公式 (100, 250, 600, 1500...)
         function updateMascot() {
-            let name = document.getElementById('mascot-name'), expBar = document.getElementById('mascot-exp-bar'), expText = document.getElementById('mascot-exp-text'), pointsMain = document.getElementById('points-display-main');
-            let exp = userPoints, maxExp = 1000;
-            let lv = Math.floor(exp / 200) + 1; if (lv > 5) lv = 5; 
-            let percentage = Math.min(((exp % 200) / 200) * 100, 100); if (exp >= 1000) percentage = 100;
-            pointsMain.innerText = exp; name.innerText = `LV${lv}`; expBar.style.width = percentage + '%'; expText.innerText = `EX ${exp}/${maxExp}`;
+            let name = document.getElementById('mascot-name');
+            let expBar = document.getElementById('mascot-exp-bar');
+            let expText = document.getElementById('mascot-exp-text');
+            let pointsMain = document.getElementById('points-display-main');
+
+            let exp = userPoints;
+            pointsMain.innerText = exp;
+
+            let lv = 1;
+            // 建立指數增長的需求陣列
+            let reqXpList = [100, 250, 600, 1500, 3750, 9375]; 
+            let currentLevelReq = reqXpList[0];
+            let totalXpStartOfLv = 0;
+
+            // 動態迴圈判定當前等級
+            for (let i = 0; i < 99; i++) {
+                // 如果超過陣列設定，則以上一級的 2.5 倍無限計算
+                currentLevelReq = i < reqXpList.length ? reqXpList[i] : Math.floor(currentLevelReq * 2.5);
+                
+                if (exp >= totalXpStartOfLv + currentLevelReq) {
+                    totalXpStartOfLv += currentLevelReq;
+                    lv++;
+                } else {
+                    break;
+                }
+            }
+
+            // 計算當前等級內的經驗值進度
+            let xpInThisLv = exp - totalXpStartOfLv;
+            let percentage = (xpInThisLv / currentLevelReq) * 100;
+            percentage = Math.max(0, Math.min(percentage, 100)); // 確保在 0~100 之間
+
+            name.innerText = `LV${lv}`;
+            expBar.style.width = percentage + '%';
+            expText.innerText = `EX ${xpInThisLv}/${currentLevelReq}`;
         }
 
         let currentTaskReward = 0; let currentTaskItem = "";
@@ -439,10 +491,30 @@ let inventory = {};     // 新增：宣告背包物品預設為空
         function renderLegTransportsUI() { let c = document.getElementById('leg-transports-container'); c.innerHTML=''; routeLegsData.forEach((l, i) => { c.innerHTML += `<div class="input-group"><span style="line-height:40px;">路段 ${i+1}: </span><select id="leg-trans-${i}" onchange="updateResults()"><option value="bike" data-co2="0" data-pts="10">🚲 單車 (10點)</option><option value="bus" data-co2="0.04" data-pts="5" selected>🚌 客運 (5點)</option><option value="car" data-co2="0.14" data-pts="0">🚗 汽車 (0點)</option></select></div>`; }); }
         function updateResults() { let co2=0; routeLegsData.forEach((l, i) => { let s=document.getElementById(`leg-trans-${i}`); if(s) co2 += l.distance*(0.14 - parseFloat(s.options[s.selectedIndex].getAttribute('data-co2'))); }); document.getElementById('res-dist').innerText=currentDistanceKm.toFixed(1); document.getElementById('res-co2').innerText=co2.toFixed(1); }
 
+        // 🌟 修正點：自動匯率折算與直接扣點數機制
+        function updateWalletDisplay() { 
+            let dynamicMoney = Math.floor(userPoints / 10);
+            document.getElementById('wallet-display').innerText = dynamicMoney; 
+        }
+
         function renderShop() { let c = document.getElementById('shop-list-container'); SHOP_ITEMS.forEach(i => { c.innerHTML+=`<div class="shop-item"><div>${i.icon} ${i.name}</div><button class="btn-primary" style="width:auto; padding:6px 12px;" onclick="buyItem(${i.cost},'${i.name}','${i.icon}')">${i.cost}元</button></div>`; }); }
-        function buyItem(cost, name, icon) { if(!currentUser) { switchTab('profile'); return alert("請先登入！"); } if(userWallet>=cost) { userWallet-=cost; inventory[name] ? inventory[name].count++ : inventory[name]={count:1, icon:icon}; updateWalletDisplay(); updateMailbox(); syncDataToCloud(); alert("兌換成功！"); } else alert("餘額不足"); }
-        function updateWalletDisplay() { document.getElementById('wallet-display').innerText=userWallet; }
-        function redeemCash() { if(userPoints>=1000) { userPoints-=1000; userWallet+=100; updateWalletDisplay(); updateMascot(); syncDataToCloud(); alert("兌換成功"); } else alert("點數不足 1000 點"); }
+        
+        function buyItem(cost, name, icon) { 
+            if(!currentUser) { switchTab('profile'); return alert("請先登入！"); } 
+            
+            // 換算所需點數 (1元 = 10點)
+            let requiredPoints = cost * 10;
+            
+            if(userPoints >= requiredPoints) { 
+                userPoints -= requiredPoints; // 結帳直接扣點數
+                inventory[name] ? inventory[name].count++ : inventory[name]={count:1, icon:icon}; 
+                
+                updateWalletDisplay(); updateMailbox(); updateMascot(); syncDataToCloud(); 
+                alert("兌換成功！已發送至您的信箱。"); 
+            } else { 
+                alert(`餘額不足！購買此道具需要 ${requiredPoints} 綠能點。`); 
+            } 
+        }
         
         function updateMailbox() { let c = document.getElementById('mailbox-container'), k = Object.keys(inventory); c.innerHTML = k.length ? "" : "<p style='text-align:center; color:#999;'>背包是空的喔！</p>"; k.forEach(key => { c.innerHTML += `<div class="mailbox-item"><span>${inventory[key].icon} ${key} x${inventory[key].count}</span><button class="btn-primary" style="background:#f57f17; width:60px; padding:6px 10px; font-size:12px;" onclick="openBarcode('${key}')">使用</button></div>`; }); }
         function openBarcode(n) { itemToConsume=n; document.getElementById('barcode-title').innerText=n; openModal('barcode-modal'); }
@@ -451,4 +523,4 @@ let inventory = {};     // 新增：宣告背包物品預設為空
         initRecommendedTrips(); renderShop(); updateMascot();
     </script>
 </body>
-</html>F
+</html>
