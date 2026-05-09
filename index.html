@@ -91,6 +91,7 @@
 <body>
 
     <div id="app-container">
+        
         <div class="top-bar">
             <div class="points-pill"><i class="fa-solid fa-leaf"></i><span id="points-display-main">0</span></div>
             <div class="exp-section">
@@ -100,8 +101,11 @@
             </div>
         </div>
 
+        <!-- 🏠 首頁 Tab -->
         <div id="tab-home" class="tab-content active">
-            <div class="mascot-area"><img id="mascot-img" src="lutu.png" alt="LUTU 兔兔" onerror="this.src='https://dummyimage.com/280x300/cde6d5/3e8e2e.png&text=請放入去背圖'"></div>
+            <div class="mascot-area">
+              <img id="mascot-img" src="lutu.png" alt="LUTU 兔兔" onerror="this.src='https://dummyimage.com/280x300/cde6d5/3e8e2e.png&text=請放入去背圖'">
+            </div>
             <div class="side-buttons">
                 <button class="side-btn" onclick="openLeaderboard()"><i class="fa-solid fa-trophy"></i></button>
                 <button class="side-btn" onclick="openFriends()"><i class="fa-solid fa-user-group"></i></button>
@@ -114,6 +118,7 @@
             </div>
         </div>
 
+        <!-- 🗺️ 探索 Tab -->
         <div id="tab-explore" class="tab-content">
             <h3 style="color: var(--primary-dark); margin-top: 0;"><i class="fa-solid fa-compass"></i> 行程規劃</h3>
             <div class="card">
@@ -129,8 +134,7 @@
                     <button class="btn-primary" style="width: 70px;" onclick="searchLocation()">定位</button>
                 </div>
                 <div id="map"></div>
-                <!-- 🌟 修正：確保這個下拉選單也會被連動更新 -->
-                <select id="waypoint-dropdown" disabled style="margin-bottom: 5px;"><option>尚未加入景點...</option></select>
+                <select id="waypoint-dropdown" disabled style="margin-bottom: 5px;"><option value="">尚未加入景點...</option></select>
                 <div class="input-group">
                     <button class="btn-primary" style="background: #1976D2;" onclick="calculateMultiStopRoute()">規劃路線</button>
                     <button class="btn-primary" style="background: #d32f2f; width: 60px;" onclick="clearMap()">清空</button>
@@ -140,7 +144,7 @@
             <div class="card">
                 <h4 style="margin: 0 0 10px 0;">導航與結算</h4>
                 <div class="input-group">
-                   <select id="gps-waypoint-select" disabled onchange="updateGPSButtonState()"><option>請先規劃...</option></select>
+                   <select id="gps-waypoint-select" disabled onchange="updateGPSButtonState()"><option value="">請先規劃...</option></select>
                     <button id="btn-gps-arrive" class="btn-primary" style="width: 80px;" onclick="simulateArrivalAndReward()" disabled>抵達</button>
                 </div>
                 <div id="leg-transports-container" style="font-size: 13px; color: #666; margin-top: 10px;">尚未規劃路線</div>
@@ -149,25 +153,38 @@
             </div>
         </div>
 
+        <!-- 🛒 商城 Tab -->
         <div id="tab-shop" class="tab-content">
             <h3 style="color: #1976D2; margin-top: 0;"><i class="fa-solid fa-store"></i> 經濟循環：讓環保變現金</h3>
-            <div class="shop-wallet">💰 碳幣等值旅遊金：<span id="wallet-display">0</span> 元<br><span style="font-size: 12px; font-weight: normal; color: #888;">(自動轉換比例：每 10 碳幣 = $1 TWD)</span></div>
+            <div class="shop-wallet">
+                💰 碳幣等值旅遊金：<span id="wallet-display">0</span> 元<br>
+                <span style="font-size: 12px; font-weight: normal; color: #888;">(自動轉換比例：每 10 碳幣 = $1 TWD)</span>
+            </div>
             <div id="shop-list-container"></div>
         </div>
 
+        <!-- 👤 個人 Tab -->
         <div id="tab-profile" class="tab-content">
             <div id="auth-section">
-                <div class="profile-header"><div class="profile-avatar" style="background: #ccc;"><i class="fa-solid fa-user-lock"></i></div><h3 style="margin-bottom: 5px;">尚未登入</h3><p style="font-size: 12px; color: #666;">登入以開啟雲端備份，目前為本機暫存模式</p></div>
+                <div class="profile-header">
+                    <div class="profile-avatar" style="background: #ccc;"><i class="fa-solid fa-user-lock"></i></div>
+                    <h3 style="margin-bottom: 5px;">尚未登入</h3>
+                    <p style="font-size: 12px; color: #666;">登入以開啟雲端備份，目前為本機暫存模式</p>
+                </div>
                 <div class="card">
-                    <input type="email" id="auth-email" placeholder="信箱 (Email)"><input type="password" id="auth-password" placeholder="密碼 (至少 6 碼)">
+                    <input type="email" id="auth-email" placeholder="信箱 (Email)">
+                    <input type="password" id="auth-password" placeholder="密碼 (至少 6 碼)">
                     <button class="btn-primary" style="background: #1976D2; margin-top:5px;" onclick="handleLogin()">登入</button>
                     <button class="btn-primary" style="margin-top:5px;" onclick="handleSignup()">註冊新帳號</button>
                 </div>
             </div>
 
             <div id="user-info-section" style="display: none;">
-                <div class="profile-header"><div class="profile-avatar"><i class="fa-solid fa-user"></i></div><h3 id="profile-nickname" style="margin-bottom: 5px;">你好, User</h3><button class="btn-primary" style="background: #d32f2f; padding: 6px; width: 100px; font-size: 12px; margin-top: 10px;" onclick="handleLogout()">登出</button></div>
-                
+                <div class="profile-header">
+                    <div class="profile-avatar"><i class="fa-solid fa-user"></i></div>
+                    <h3 id="profile-nickname" style="margin-bottom: 5px;">你好, User</h3>
+                    <button class="btn-primary" style="background: #d32f2f; padding: 6px; width: 100px; font-size: 12px; margin-top: 10px;" onclick="handleLogout()">登出</button>
+                </div>
                 <div class="card" style="padding: 10px 15px;">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <span style="font-weight: bold; font-size: 14px; color: #555;">📍 居住縣市</span>
@@ -183,7 +200,6 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="card"><h4 style="margin: 0 0 10px 0; color: #1976D2;"><i class="fa-solid fa-ticket"></i> 我的背包 (戰利品)</h4><p style="font-size: 12px; color: #666; margin-top: 0;">點擊使用出示條碼</p><div id="mailbox-container"></div></div>
             </div>
         </div>
@@ -195,7 +211,7 @@
             <div class="nav-item" onclick="switchTab('profile')"><i class="fa-solid fa-user"></i><span id="nav-user-text">個人</span></div>
         </div>
 
-        <!-- Modals -->
+        <!-- 🏆 排行榜 Modal -->
         <div class="modal-overlay" id="leaderboard-modal">
             <div class="modal-content" style="background-color: #f4f6f8; min-height: 480px;">
                 <button class="close-btn" onclick="closeModal('leaderboard-modal')">×</button>
@@ -217,6 +233,7 @@
             </div>
         </div>
 
+        <!-- 👥 好友管理 Modal -->
         <div class="modal-overlay" id="friends-modal">
             <div class="modal-content" style="background-color: #f4f6f8;">
                 <button class="close-btn" onclick="closeModal('friends-modal')">×</button>
@@ -227,6 +244,7 @@
             </div>
         </div>
 
+        <!-- 📖 旅行手冊 Modal -->
         <div class="modal-overlay" id="itinerary-modal">
             <div class="modal-content" style="background-color: #f7f9fa;">
                 <button class="close-btn" onclick="closeModal('itinerary-modal')">×</button>
@@ -258,6 +276,7 @@
             </div>
         </div>
 
+        <!-- 🏅 在地任務 Modal -->
         <div class="modal-overlay" id="task-modal">
             <div class="modal-content" style="background-color: #f4f6f8;">
                 <button class="close-btn" onclick="closeModal('task-modal')">×</button>
@@ -275,42 +294,10 @@
             </div>
         </div>
 
-        <div class="modal-overlay" id="qr-scanner-modal">
-            <div class="modal-content" style="background: #222; color: white;">
-                <button class="close-btn" style="color: white;" onclick="closeModal('qr-scanner-modal')">×</button>
-                <h4 style="color: var(--primary); margin-top: 0; text-align: center;">掃描店家 QR Code</h4>
-                <div style="width: 100%; height: 200px; background: #111; margin: 15px 0; position: relative; border: 2px dashed var(--primary); border-radius: 12px; overflow: hidden;">
-                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #777; font-size: 14px; text-align: center;"><i class="fa-solid fa-qrcode" style="font-size: 40px; margin-bottom: 10px;"></i><br>相機啟動中...</div>
-                    <div style="width: 100%; height: 3px; background: #00ff00; position: absolute; top: 0; left: 0; box-shadow: 0 0 12px #00ff00; animation: scanAnim 2s infinite linear;"></div>
-                </div>
-                <button class="btn-primary" onclick="simulateTaskSuccess()">模擬掃描成功</button>
-            </div>
-        </div>
-
-        <div class="modal-overlay" id="wardrobe-modal">
-            <div class="modal-content">
-                <button class="close-btn" onclick="closeModal('wardrobe-modal')">×</button>
-                <h3 style="color: #8e24aa; margin-top: 0;"><i class="fa-solid fa-shirt"></i> LUTU 衣櫥</h3>
-                <div class="wardrobe-grid">
-                    <div class="wardrobe-slot active"><i class="fa-solid fa-check-circle" style="font-size: 24px; margin-bottom: 5px;"></i>基本款</div>
-                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>新北限定</div>
-                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>臺北限定</div>
-                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>臺中限定</div>
-                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>臺南限定</div>
-                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>高雄限定</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal-overlay" id="barcode-modal">
-            <div class="modal-content" style="text-align: center;">
-                <button class="close-btn" onclick="closeModal('barcode-modal')">×</button>
-                <h4 id="barcode-title" style="margin-top: 0;">票券名稱</h4>
-                <div class="fake-barcode" style="background: repeating-linear-gradient(90deg, #333 0, #333 2px, transparent 2px, transparent 4px); height: 60px; margin: 15px auto;"></div>
-                <button class="btn-primary" onclick="confirmConsumeTicket()">模擬店員核銷</button>
-            </div>
-        </div>
-
+        <!-- 其他 Modal -->
+        <div class="modal-overlay" id="qr-scanner-modal"><div class="modal-content" style="background: #222; color: white;"><button class="close-btn" style="color: white;" onclick="closeModal('qr-scanner-modal')">×</button><h4 style="color: var(--primary); margin-top: 0; text-align: center;">掃描店家 QR Code</h4><div style="width: 100%; height: 200px; background: #111; margin: 15px 0; position: relative; border: 2px dashed var(--primary); border-radius: 12px; overflow: hidden;"><div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #777; font-size: 14px; text-align: center;"><i class="fa-solid fa-qrcode" style="font-size: 40px; margin-bottom: 10px;"></i><br>相機啟動中...</div><div style="width: 100%; height: 3px; background: #00ff00; position: absolute; top: 0; left: 0; box-shadow: 0 0 12px #00ff00; animation: scanAnim 2s infinite linear;"></div></div><button class="btn-primary" onclick="simulateTaskSuccess()">模擬掃描成功</button></div></div>
+        <div class="modal-overlay" id="wardrobe-modal"><div class="modal-content"><button class="close-btn" onclick="closeModal('wardrobe-modal')">×</button><h3 style="color: #8e24aa; margin-top: 0;"><i class="fa-solid fa-shirt"></i> LUTU 衣櫥</h3><div class="wardrobe-grid"><div class="wardrobe-slot active"><i class="fa-solid fa-check-circle" style="font-size: 24px; margin-bottom: 5px;"></i>基本款</div><div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>新北限定</div><div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>臺北限定</div><div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>臺中限定</div><div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>臺南限定</div><div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>高雄限定</div></div></div></div>
+        <div class="modal-overlay" id="barcode-modal"><div class="modal-content" style="text-align: center;"><button class="close-btn" onclick="closeModal('barcode-modal')">×</button><h4 id="barcode-title" style="margin-top: 0;">票券名稱</h4><div class="fake-barcode" style="background: repeating-linear-gradient(90deg, #333 0, #333 2px, transparent 2px, transparent 4px); height: 60px; margin: 15px auto;"></div><button class="btn-primary" onclick="confirmConsumeTicket()">模擬店員核銷</button></div></div>
     </div>
 
     <script>
@@ -424,12 +411,9 @@
         }
 
         const SHOP_ITEMS = [
-            { name: "綠色旅宿 $500 折價券", desc: "全台綠色合作旅宿適用", cost: 500, icon: "🏨" },
-            { name: "國家公園電子門票", desc: "最高折抵 50% 票價", cost: 100, icon: "🏞️" },
-            { name: "台鐵/客運 綠色班次 8折券", desc: "累積達標獲優惠", cost: 50, icon: "🚆" },
-            { name: "縣市限定伴手禮兌換券", desc: "兌換專屬優惠券", cost: 200, icon: "🎁" },
-            { name: "TPASS 基北北桃 月票", desc: "大眾運輸通勤首選", cost: 1200, icon: "🎫" },
-            { name: "YouBike 100元騎乘金", desc: "最後一哩路低碳移動", cost: 100, icon: "🚲" }
+            { name: "綠色旅宿 $500 折價券", desc: "全台綠色合作旅宿適用", cost: 500, icon: "🏨" }, { name: "國家公園電子門票", desc: "最高折抵 50% 票價", cost: 100, icon: "🏞️" },
+            { name: "台鐵/客運 綠色班次 8折券", desc: "累積達標獲優惠", cost: 50, icon: "🚆" }, { name: "縣市限定伴手禮兌換券", desc: "兌換專屬優惠券", cost: 200, icon: "🎁" },
+            { name: "TPASS 基北北桃 月票", desc: "大眾運輸通勤首選", cost: 1200, icon: "🎫" }, { name: "YouBike 100元騎乘金", desc: "最後一哩路低碳移動", cost: 100, icon: "🚲" }
         ];
 
         function renderShop() { 
@@ -441,10 +425,8 @@
 
         function buyItem(cost, name, icon) { 
             let reqPoints = cost * 10;
-            if(userPoints >= reqPoints) { 
-                userPoints -= reqPoints; inventory[name] ? inventory[name].count++ : inventory[name]={count:1, icon:icon}; 
-                syncDataToCloud(); refreshAllUI(); alert("兌換成功！已發送至您的信箱。"); 
-            } else { alert(`碳幣不足！需要 ${reqPoints} 碳幣 (您目前有 ${userPoints})。`); } 
+            if(userPoints >= reqPoints) { userPoints -= reqPoints; inventory[name] ? inventory[name].count++ : inventory[name]={count:1, icon:icon}; syncDataToCloud(); refreshAllUI(); alert("兌換成功！已發送至您的信箱。"); } 
+            else { alert(`碳幣不足！需要 ${reqPoints} 碳幣 (您目前有 ${userPoints})。`); } 
         }
 
         function updateMailbox() { 
@@ -456,7 +438,6 @@
         function confirmConsumeTicket() { if(inventory[itemToConsume]) { inventory[itemToConsume].count--; if(inventory[itemToConsume].count<=0) delete inventory[itemToConsume]; syncDataToCloud(); refreshAllUI(); closeModal('barcode-modal'); alert("核銷成功");} }
 
         let currentRankMode = 'national'; 
-
         function openLeaderboard() { openModal('leaderboard-modal'); renderLeaderboard(); }
         function setRankMode(mode) { 
             currentRankMode = mode; 
@@ -466,19 +447,14 @@
         }
         
         async function renderLeaderboard() {
-            let cat = document.getElementById('rank-category').value;
-            let citySel = document.getElementById('rank-city-select');
+            let cat = document.getElementById('rank-category').value; let citySel = document.getElementById('rank-city-select');
             citySel.style.display = (cat === 'lv_city') ? 'block' : 'none';
-            
-            let list = document.getElementById('leaderboard-list'); 
-            list.innerHTML = '<div style="text-align:center; padding:20px; color:#999;"><i class="fa-solid fa-spinner fa-spin"></i> 正在向伺服器同步資料中...</div>';
+            let list = document.getElementById('leaderboard-list'); list.innerHTML = '<div style="text-align:center; padding:20px; color:#999;"><i class="fa-solid fa-spinner fa-spin"></i> 正在向伺服器同步資料中...</div>';
             
             const { data, error } = await supabaseClient.from('users').select('username, exp, green_points, city, co2_saved');
             if (error || !data) { list.innerHTML = '<div style="text-align:center; padding: 20px; color:#d32f2f;">無法取得雲端資料，請檢查網路。</div>'; return; }
 
-            let users = data;
-            let myName = currentUser ? currentUser.email.split('@')[0] : '訪客';
-
+            let users = data; let myName = currentUser ? currentUser.email.split('@')[0] : '訪客';
             if (currentRankMode === 'friend') { users = users.filter(u => myFriends.includes(u.username) || u.username === myName); } 
             else if (cat === 'lv_city') { users = users.filter(u => u.city === citySel.value); }
 
@@ -491,18 +467,13 @@
             users.forEach((u, i) => {
                 let displayName = u.username === myName ? `${u.username} (你)` : u.username;
                 let score = 0, unit = "";
-                
                 if(cat.includes('co2')) { score = (u.co2_saved || 0).toFixed(2); unit = " kg"; } 
                 else { 
                     let lv = 1, reqXpList = [100, 250, 600, 1500, 3750, 9375], currentReq = reqXpList[0], startXp = 0;
                     let userExpVal = u.exp || 0;
-                    for (let j = 0; j < 99; j++) {
-                        currentReq = j < reqXpList.length ? reqXpList[j] : Math.floor(currentReq * 2.5);
-                        if (userExpVal >= startXp + currentReq) { startXp += currentReq; lv++; } else break;
-                    }
+                    for (let j = 0; j < 99; j++) { currentReq = j < reqXpList.length ? reqXpList[j] : Math.floor(currentReq * 2.5); if (userExpVal >= startXp + currentReq) { startXp += currentReq; lv++; } else break; }
                     score = lv; unit = " LV"; 
                 }
-
                 list.innerHTML += `<div class="rank-item"><span><strong class="rank-num">${i + 1}</strong> ${displayName}</span><span style="font-weight:bold; color:#555;">${score}${unit}</span></div>`;
             });
         }
@@ -513,12 +484,7 @@
             c.innerHTML = myFriends.length ? '' : '<p style="text-align:center; color:#999; font-size:13px;">目前還沒有好友喔！</p>';
             myFriends.forEach((f, idx) => { c.innerHTML += `<div class="friend-item"><span><i class="fa-solid fa-user-circle" style="color:#ccc; font-size:24px; margin-right:8px; vertical-align:middle;"></i>${f}</span><button style="background:none; border:none; color:#d32f2f; cursor:pointer; font-size:16px;" onclick="removeFriend(${idx})"><i class="fa-solid fa-user-xmark"></i></button></div>`; });
         }
-        function addFriend() {
-            let inp = document.getElementById('friend-search-input');
-            if(!inp.value.trim()) return alert("請輸入好友名稱！");
-            if(myFriends.length >= 50) return alert("好友數量已達上限！");
-            myFriends.push(inp.value.trim()); inp.value = ''; syncDataToCloud(); renderFriendList(); alert('✅ 已發送好友邀請！');
-        }
+        function addFriend() { let inp = document.getElementById('friend-search-input'); if(!inp.value.trim()) return alert("請輸入好友名稱！"); if(myFriends.length >= 50) return alert("好友數量已達上限！"); myFriends.push(inp.value.trim()); inp.value = ''; syncDataToCloud(); renderFriendList(); alert('✅ 已發送好友邀請！'); }
         function removeFriend(idx) { if(confirm("確定要解除好友關係嗎？")) { myFriends.splice(idx, 1); syncDataToCloud(); renderFriendList(); } }
 
         let currentTaskExp = 0, currentTaskCoin = 0, currentTaskItem = "";
@@ -531,20 +497,15 @@
             else if(city === "臺中市") tasks = [{ name: "參觀歌劇院不索取紙本導覽", exp: 100, coin: 10, reward: "🎭 歌劇院專屬 Skin" }];
             else tasks = [{ name: "低碳旅宿 Check-in", exp: 200, coin: 20, reward: "🎁 驚喜小禮" }, { name: "租借 YouBike", exp: 50, coin: 5, reward: "無" }];
             
-            tasks.forEach(t => { 
-                c.innerHTML += `<div class="task-item" onclick="openScanner(${t.exp}, ${t.coin}, '${t.reward}')"><div style="flex:1"><div style="font-weight:bold; font-size:15px; margin-bottom:5px;">${t.name}</div><div style="font-size:12px; color:#888;">⭐ +${t.exp} 經驗 | 💰 +${t.coin} 碳幣 <br>🎁 獎勵：${t.reward}</div></div><button class="btn-primary" style="width:50px; padding:10px 5px; font-size:14px; background:#55a846; margin-left:10px;">解<br>鎖</button></div>`; 
-            });
+            tasks.forEach(t => { c.innerHTML += `<div class="task-item" onclick="openScanner(${t.exp}, ${t.coin}, '${t.reward}')"><div style="flex:1"><div style="font-weight:bold; font-size:15px; margin-bottom:5px;">${t.name}</div><div style="font-size:12px; color:#888;">⭐ +${t.exp} 經驗 | 💰 +${t.coin} 碳幣 <br>🎁 獎勵：${t.reward}</div></div><button class="btn-primary" style="width:50px; padding:10px 5px; font-size:14px; background:#55a846; margin-left:10px;">解<br>鎖</button></div>`; });
         }
         function openScanner(exp, coin, rw) { currentTaskExp = exp; currentTaskCoin = coin; currentTaskItem = rw; closeModal('task-modal'); openModal('qr-scanner-modal'); }
         
-        function simulateTaskSuccess() { 
-            closeModal('qr-scanner-modal'); userExp += currentTaskExp; userPoints += currentTaskCoin; 
-            let msg = `🎉 任務達成！\n獲得：\n⭐ +${currentTaskExp} 經驗\n💰 +${currentTaskCoin} 碳幣`; 
-            if(currentTaskItem !== "無") { inventory[currentTaskItem] ? inventory[currentTaskItem].count += 1 : inventory[currentTaskItem] = { count: 1, icon: "🎁" }; msg += `\n🎁 戰利品：${currentTaskItem}`; } 
-            syncDataToCloud(); refreshAllUI(); alert(msg); 
-        }
+        function simulateTaskSuccess() { closeModal('qr-scanner-modal'); userExp += currentTaskExp; userPoints += currentTaskCoin; let msg = `🎉 任務達成！\n獲得：\n⭐ +${currentTaskExp} 經驗\n💰 +${currentTaskCoin} 碳幣`; if(currentTaskItem !== "無") { inventory[currentTaskItem] ? inventory[currentTaskItem].count += 1 : inventory[currentTaskItem] = { count: 1, icon: "🎁" }; msg += `\n🎁 戰利品：${currentTaskItem}`; } syncDataToCloud(); refreshAllUI(); alert(msg); }
 
-        // 🌟 修正：防呆保護機制，確保選項變更時不會引發空值錯誤
+        // ==========================================
+        // 🌟 修正：防呆連動機制
+        // ==========================================
         const RECOMMENDED_TRIPS = [
             { title: "🌿 水源茶香‧坪林低碳 1日遊", points: [{ lat: 24.9678, lng: 121.5412, name: "新店捷運站" }, { lat: 24.9316, lng: 121.7067, name: "坪林茶業博物館" }, { lat: 24.9338, lng: 121.7105, name: "坪林老街" }], zoomCoord: [24.94, 121.62] },
             { title: "🚂 鐵道綠跡‧雙溪貢寮 1日遊", points: [{ lat: 25.0354, lng: 121.8643, name: "雙溪火車站" }, { lat: 25.0006, lng: 121.9575, name: "舊草嶺隧道" }, { lat: 25.0223, lng: 121.9080, name: "貢寮老街" }], zoomCoord: [25.01, 121.91] },
@@ -554,6 +515,7 @@
         ];
         
         let waypoints = [], routeLegsData = [], routeLayer = null, currentDistanceKm = 0, searchMarker = null;
+
         const map = L.map('map').setView([23.6978, 120.9605], 7); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
         map.on('click', function(e) { if(searchMarker) { map.removeLayer(searchMarker); searchMarker = null; } let m = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map); waypoints.push({ marker: m, lat: e.latlng.lat, lng: e.latlng.lng, visited: false, customName: null }); updateDynamicDisplays(); });
 
@@ -565,10 +527,10 @@
             }); 
         }
 
-        // 🌟 修正：加入防呆保護，避免選到空選項導致當機
+        // 🌟 修正：防呆保護，避免選到空選項導致當機
         function loadSelectedRecommended() { 
             let val = document.getElementById('recommended-itinerary-select').value;
-            if(val === "") { clearMap(); return; } // 防呆：如果選到空選項，清空地圖並停止執行
+            if(val === "") { clearMap(); return; } // 防呆：選到預設空選項就清空返回
             
             clearMap(); 
             let trip = RECOMMENDED_TRIPS[parseInt(val)]; 
@@ -587,31 +549,31 @@
         
         function clearMap() { 
             waypoints.forEach(w => map.removeLayer(w.marker)); waypoints=[]; routeLegsData=[]; 
-            if(routeLayer) { map.removeLayer(routeLayer); routeLayer = null; } 
+            if(routeLayer) { map.removeLayer(routeLayer); routeLayer = null; } // 確保徹底清除
             currentDistanceKm=0; document.getElementById('leg-transports-container').innerHTML = "尚未規劃路線"; 
             updateDynamicDisplays(); updateResults(); 
         }
         
-        // 🌟 修正：確保未加入景點的下拉選單也會被連動更新
+        // 🌟 修正：兩個下拉選單同步連動，解決 NaN 當機問題
         function updateDynamicDisplays() { 
             let gd = document.getElementById('gps-waypoint-select'), itiList = document.getElementById('itinerary-list-display');
-            let wd = document.getElementById('waypoint-dropdown'); // 抓取原本失效的下拉選單
+            let wd = document.getElementById('waypoint-dropdown'); 
 
             if(waypoints.length===0) { 
-                gd.innerHTML='<option>請先定位...</option>'; gd.disabled=true; 
-                wd.innerHTML='<option>尚未加入景點...</option>'; wd.disabled=true; // 連動重置
+                gd.innerHTML='<option value="">請先定位...</option>'; gd.disabled=true; 
+                wd.innerHTML='<option value="">尚未加入景點...</option>'; wd.disabled=true; 
                 itiList.innerHTML = "尚未規劃行程。"; 
                 updateGPSButtonState(); return; 
             } 
             
             gd.disabled=false; gd.innerHTML=""; 
-            wd.disabled=false; wd.innerHTML=""; // 開啟並清空
+            wd.disabled=false; wd.innerHTML=""; 
             let itiHTML = "";
             
             waypoints.forEach((w,i) => { 
                 let n = w.customName || `景點 ${i+1}`; 
                 gd.innerHTML+=`<option value="${i}">[${w.visited?'⚫':'📍'}] ${n}</option>`; 
-                wd.innerHTML+=`<option value="${i}">${n}</option>`; // 同步新增選項
+                wd.innerHTML+=`<option value="${i}">${n}</option>`; 
                 itiHTML += `<div style="margin-bottom:6px;"><i class="fa-solid fa-location-dot" style="color:var(--primary); margin-right:5px;"></i> ${n}</div>`; 
             }); 
             
@@ -619,7 +581,14 @@
             updateGPSButtonState(); 
         }
 
-        function updateGPSButtonState() { let sel = document.getElementById('gps-waypoint-select'), btn = document.getElementById('btn-gps-arrive'); if(sel.value==="") { btn.disabled=true; return; } let idx = parseInt(sel.value); if(waypoints[idx].visited) { btn.disabled=true; btn.innerText="已到達"; btn.style.background="#aaa"; } else { btn.disabled=false; btn.innerText="📍 抵達"; btn.style.background="var(--primary)"; } }
+        function updateGPSButtonState() { 
+            let sel = document.getElementById('gps-waypoint-select'), btn = document.getElementById('btn-gps-arrive'); 
+            if(sel.value==="" || isNaN(parseInt(sel.value))) { btn.disabled=true; return; } // 防呆保護
+            let idx = parseInt(sel.value); 
+            if(!waypoints[idx]) return;
+            if(waypoints[idx].visited) { btn.disabled=true; btn.innerText="已到達"; btn.style.background="#aaa"; } 
+            else { btn.disabled=false; btn.innerText="📍 抵達"; btn.style.background="var(--primary)"; } 
+        }
 
         function simulateArrivalAndReward() { 
             let idx = parseInt(document.getElementById('gps-waypoint-select').value); if(isNaN(idx) || waypoints[idx].visited) return; 
