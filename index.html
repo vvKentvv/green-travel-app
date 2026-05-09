@@ -30,9 +30,23 @@
         .tab-content.active { display: flex; flex-direction: column; }
         #tab-home { background: var(--bg-mint); position: relative; overflow: hidden; }
         .mascot-area { flex: 1; display: flex; justify-content: center; align-items: center; z-index: 5; margin-bottom: 150px; }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
-        #mascot-img { width: 280px; height: auto; object-fit: contain; animation: float 4s ease-in-out infinite; }
         
+        /* 🌟 兔兔原有的漂浮動畫 */
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
+        #mascot-img { width: 280px; height: auto; object-fit: contain; animation: float 4s ease-in-out infinite; cursor: pointer; transform-origin: bottom center; }
+        
+        /* 🌟 兔兔點擊後的打招呼(跳躍揮手)動畫 */
+        @keyframes mascotGreet {
+            0% { transform: scale(1) translateY(0); }
+            20% { transform: scale(1.05) translateY(-25px) rotate(-8deg); }
+            40% { transform: scale(1.05) translateY(-25px) rotate(8deg); }
+            60% { transform: scale(1.05) translateY(-25px) rotate(-8deg); }
+            80% { transform: scale(1.05) translateY(-25px) rotate(8deg); }
+            100% { transform: scale(1) translateY(0) rotate(0deg); }
+        }
+        /* 加上 !important 強制覆蓋原本的漂浮動畫 */
+        .greet-anim { animation: mascotGreet 0.8s ease-in-out !important; }
+
         .side-buttons { position: absolute; right: 15px; top: 130px; display: flex; flex-direction: column; gap: 12px; z-index: 20; }
         .side-btn { width: 45px; height: 45px; background: white; border: 2px solid var(--primary); border-radius: 12px; font-size: 20px; color: var(--primary-dark); cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.15); display: flex; justify-content: center; align-items: center; }
 
@@ -103,13 +117,16 @@
 
         <!-- 🏠 首頁 Tab -->
         <div id="tab-home" class="tab-content active">
+            <!-- 🌟 修正點：移除預設文字，加入互動點擊事件 -->
             <div class="mascot-area">
-              <img id="mascot-img" src="rabbit.png" alt="LUTU 兔兔">
+              <img id="mascot-img" src="rabbit.png" alt="LUTU 兔兔" onclick="playGreetAnimation()">
             </div>
+            
             <div class="side-buttons">
                 <button class="side-btn" onclick="openLeaderboard()"><i class="fa-solid fa-trophy"></i></button>
                 <button class="side-btn" onclick="openFriends()"><i class="fa-solid fa-user-group"></i></button>
             </div>
+
             <div class="ground-area"></div>
             <div class="action-buttons">
                 <button class="action-btn" onclick="openModal('itinerary-modal')"><i class="fa-solid fa-book-open"></i><span>旅行手冊</span></button>
@@ -294,10 +311,42 @@
             </div>
         </div>
 
-        <!-- 其他 Modal -->
-        <div class="modal-overlay" id="qr-scanner-modal"><div class="modal-content" style="background: #222; color: white;"><button class="close-btn" style="color: white;" onclick="closeModal('qr-scanner-modal')">×</button><h4 style="color: var(--primary); margin-top: 0; text-align: center;">掃描店家 QR Code</h4><div style="width: 100%; height: 200px; background: #111; margin: 15px 0; position: relative; border: 2px dashed var(--primary); border-radius: 12px; overflow: hidden;"><div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #777; font-size: 14px; text-align: center;"><i class="fa-solid fa-qrcode" style="font-size: 40px; margin-bottom: 10px;"></i><br>相機啟動中...</div><div style="width: 100%; height: 3px; background: #00ff00; position: absolute; top: 0; left: 0; box-shadow: 0 0 12px #00ff00; animation: scanAnim 2s infinite linear;"></div></div><button class="btn-primary" onclick="simulateTaskSuccess()">模擬掃描成功</button></div></div>
-        <div class="modal-overlay" id="wardrobe-modal"><div class="modal-content"><button class="close-btn" onclick="closeModal('wardrobe-modal')">×</button><h3 style="color: #8e24aa; margin-top: 0;"><i class="fa-solid fa-shirt"></i> LUTU 衣櫥</h3><div class="wardrobe-grid"><div class="wardrobe-slot active"><i class="fa-solid fa-check-circle" style="font-size: 24px; margin-bottom: 5px;"></i>基本款</div><div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>新北限定</div><div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>臺北限定</div><div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>臺中限定</div><div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>臺南限定</div><div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>高雄限定</div></div></div></div>
-        <div class="modal-overlay" id="barcode-modal"><div class="modal-content" style="text-align: center;"><button class="close-btn" onclick="closeModal('barcode-modal')">×</button><h4 id="barcode-title" style="margin-top: 0;">票券名稱</h4><div class="fake-barcode" style="background: repeating-linear-gradient(90deg, #333 0, #333 2px, transparent 2px, transparent 4px); height: 60px; margin: 15px auto;"></div><button class="btn-primary" onclick="confirmConsumeTicket()">模擬店員核銷</button></div></div>
+        <div class="modal-overlay" id="qr-scanner-modal">
+            <div class="modal-content" style="background: #222; color: white;">
+                <button class="close-btn" style="color: white;" onclick="closeModal('qr-scanner-modal')">×</button>
+                <h4 style="color: var(--primary); margin-top: 0; text-align: center;">掃描店家 QR Code</h4>
+                <div style="width: 100%; height: 200px; background: #111; margin: 15px 0; position: relative; border: 2px dashed var(--primary); border-radius: 12px; overflow: hidden;">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #777; font-size: 14px; text-align: center;"><i class="fa-solid fa-qrcode" style="font-size: 40px; margin-bottom: 10px;"></i><br>相機啟動中...</div>
+                    <div style="width: 100%; height: 3px; background: #00ff00; position: absolute; top: 0; left: 0; box-shadow: 0 0 12px #00ff00; animation: scanAnim 2s infinite linear;"></div>
+                </div>
+                <button class="btn-primary" onclick="simulateTaskSuccess()">模擬掃描成功</button>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="wardrobe-modal">
+            <div class="modal-content">
+                <button class="close-btn" onclick="closeModal('wardrobe-modal')">×</button>
+                <h3 style="color: #8e24aa; margin-top: 0;"><i class="fa-solid fa-shirt"></i> LUTU 衣櫥</h3>
+                <div class="wardrobe-grid">
+                    <div class="wardrobe-slot active"><i class="fa-solid fa-check-circle" style="font-size: 24px; margin-bottom: 5px;"></i>基本款</div>
+                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>新北限定</div>
+                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>臺北限定</div>
+                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>臺中限定</div>
+                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>臺南限定</div>
+                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>高雄限定</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="barcode-modal">
+            <div class="modal-content" style="text-align: center;">
+                <button class="close-btn" onclick="closeModal('barcode-modal')">×</button>
+                <h4 id="barcode-title" style="margin-top: 0;">票券名稱</h4>
+                <div class="fake-barcode" style="background: repeating-linear-gradient(90deg, #333 0, #333 2px, transparent 2px, transparent 4px); height: 60px; margin: 15px auto;"></div>
+                <button class="btn-primary" onclick="confirmConsumeTicket()">模擬店員核銷</button>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -306,6 +355,22 @@
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let currentUser = null, userPoints = 0, userExp = 0, userCo2 = 0, inventory = {}, userCity = "新北市", myFriends = [], isSyncing = false; 
+
+        // 🌟 新增：兔兔互動動畫函式
+        function playGreetAnimation() {
+            let mascot = document.getElementById('mascot-img');
+            // 移除原本的 class 以便可以重複觸發
+            mascot.classList.remove('greet-anim');
+            // 觸發網頁重繪 (Reflow) 讓瀏覽器知道我們要重置動畫
+            void mascot.offsetWidth; 
+            // 加上打招呼的動畫
+            mascot.classList.add('greet-anim');
+            
+            // 動畫結束後(800毫秒)移除 class，讓它恢復原本的漂浮
+            setTimeout(() => {
+                mascot.classList.remove('greet-anim');
+            }, 800);
+        }
 
         function saveLocalData() { localStorage.setItem('lutu_data', JSON.stringify({ points: userPoints, exp: userExp, co2: userCo2, inv: inventory, friends: myFriends, city: userCity })); }
 
@@ -503,9 +568,6 @@
         
         function simulateTaskSuccess() { closeModal('qr-scanner-modal'); userExp += currentTaskExp; userPoints += currentTaskCoin; let msg = `🎉 任務達成！\n獲得：\n⭐ +${currentTaskExp} 經驗\n💰 +${currentTaskCoin} 碳幣`; if(currentTaskItem !== "無") { inventory[currentTaskItem] ? inventory[currentTaskItem].count += 1 : inventory[currentTaskItem] = { count: 1, icon: "🎁" }; msg += `\n🎁 戰利品：${currentTaskItem}`; } syncDataToCloud(); refreshAllUI(); alert(msg); }
 
-        // ==========================================
-        // 🌟 修正：防呆連動機制
-        // ==========================================
         const RECOMMENDED_TRIPS = [
             { title: "🌿 水源茶香‧坪林低碳 1日遊", points: [{ lat: 24.9678, lng: 121.5412, name: "新店捷運站" }, { lat: 24.9316, lng: 121.7067, name: "坪林茶業博物館" }, { lat: 24.9338, lng: 121.7105, name: "坪林老街" }], zoomCoord: [24.94, 121.62] },
             { title: "🚂 鐵道綠跡‧雙溪貢寮 1日遊", points: [{ lat: 25.0354, lng: 121.8643, name: "雙溪火車站" }, { lat: 25.0006, lng: 121.9575, name: "舊草嶺隧道" }, { lat: 25.0223, lng: 121.9080, name: "貢寮老街" }], zoomCoord: [25.01, 121.91] },
@@ -515,7 +577,6 @@
         ];
         
         let waypoints = [], routeLegsData = [], routeLayer = null, currentDistanceKm = 0, searchMarker = null;
-
         const map = L.map('map').setView([23.6978, 120.9605], 7); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
         map.on('click', function(e) { if(searchMarker) { map.removeLayer(searchMarker); searchMarker = null; } let m = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map); waypoints.push({ marker: m, lat: e.latlng.lat, lng: e.latlng.lng, visited: false, customName: null }); updateDynamicDisplays(); });
 
@@ -527,10 +588,9 @@
             }); 
         }
 
-        // 🌟 修正：防呆保護，避免選到空選項導致當機
         function loadSelectedRecommended() { 
             let val = document.getElementById('recommended-itinerary-select').value;
-            if(val === "") { clearMap(); return; } // 防呆：選到預設空選項就清空返回
+            if(val === "") { clearMap(); return; } 
             
             clearMap(); 
             let trip = RECOMMENDED_TRIPS[parseInt(val)]; 
@@ -549,12 +609,11 @@
         
         function clearMap() { 
             waypoints.forEach(w => map.removeLayer(w.marker)); waypoints=[]; routeLegsData=[]; 
-            if(routeLayer) { map.removeLayer(routeLayer); routeLayer = null; } // 確保徹底清除
+            if(routeLayer) { map.removeLayer(routeLayer); routeLayer = null; } 
             currentDistanceKm=0; document.getElementById('leg-transports-container').innerHTML = "尚未規劃路線"; 
             updateDynamicDisplays(); updateResults(); 
         }
         
-        // 🌟 修正：兩個下拉選單同步連動，解決 NaN 當機問題
         function updateDynamicDisplays() { 
             let gd = document.getElementById('gps-waypoint-select'), itiList = document.getElementById('itinerary-list-display');
             let wd = document.getElementById('waypoint-dropdown'); 
@@ -583,7 +642,7 @@
 
         function updateGPSButtonState() { 
             let sel = document.getElementById('gps-waypoint-select'), btn = document.getElementById('btn-gps-arrive'); 
-            if(sel.value==="" || isNaN(parseInt(sel.value))) { btn.disabled=true; return; } // 防呆保護
+            if(sel.value==="" || isNaN(parseInt(sel.value))) { btn.disabled=true; return; } 
             let idx = parseInt(sel.value); 
             if(!waypoints[idx]) return;
             if(waypoints[idx].visited) { btn.disabled=true; btn.innerText="已到達"; btn.style.background="#aaa"; } 
