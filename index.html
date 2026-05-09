@@ -75,6 +75,7 @@
         #tab-shop { background: #f0f4f8; padding: 15px; box-sizing: border-box; }
         .shop-wallet { background: #fff9c4; padding: 15px; border-radius: 12px; text-align: center; font-weight: bold; color: #f57f17; margin-bottom: 15px; }
         .shop-item { display: flex; justify-content: space-between; align-items: center; background: white; padding: 12px; border-radius: 8px; margin-bottom: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .shop-desc { font-size: 11px; color: #777; margin-top: 4px; display: block; }
 
         /* 👤 個人 Tab */
         #tab-profile { background: #f0f4f8; padding: 15px; box-sizing: border-box; }
@@ -121,6 +122,7 @@
                 <div class="exp-bar-container">
                     <div id="mascot-exp-bar"></div>
                 </div>
+                <!-- 經驗值文字會動態更新 -->
                 <div id="mascot-exp-text" class="exp-text">EX 0/100</div>
             </div>
         </div>
@@ -128,7 +130,7 @@
         <!-- 🏠 首頁 Tab -->
         <div id="tab-home" class="tab-content active">
             <div class="mascot-area">
-                <img id="mascot-img" src="lutu.png" alt="LUTU 兔兔" onerror="this.src='https://dummyimage.com/280x300/cde6d5/3e8e2e.png&text=請放入去背圖'">
+              <img id="mascot-img" src="rabbit.png" alt="LUTU 兔兔" onerror="this.src='https://dummyimage.com/280x300/cde6d5/3e8e2e.png&text=請放入去背圖'">
             </div>
             <div class="ground-area"></div>
             <div class="action-buttons">
@@ -169,8 +171,7 @@
             <div class="card">
                 <h4 style="margin: 0 0 10px 0;">導航與結算</h4>
                 <div class="input-group">
-                    <!-- 🌟 修正點：加入 onchange="updateGPSButtonState()" -->
-                    <select id="gps-waypoint-select" disabled onchange="updateGPSButtonState()"><option>請先規劃...</option></select>
+                   <select id="gps-waypoint-select" disabled onchange="updateGPSButtonState()"><option>請先規劃...</option></select>
                     <button id="btn-gps-arrive" class="btn-disabled" style="width: 80px;" onclick="simulateArrivalAndReward()" disabled>抵達</button>
                 </div>
                 <div id="leg-transports-container" style="font-size: 13px; color: #666; margin-top: 10px;">尚未規劃路線</div>
@@ -179,16 +180,13 @@
             </div>
         </div>
 
-        <!-- 🛒 商城 Tab -->
+        <!-- 🛒 商城 Tab (配合簡報圖更新) -->
         <div id="tab-shop" class="tab-content">
-            <h3 style="color: #1976D2; margin-top: 0;"><i class="fa-solid fa-store"></i> 旅遊金商城</h3>
-            
-            <!-- 🌟 修正點：移除兌換按鈕，改為全自動顯示等值旅遊金 -->
+            <h3 style="color: #1976D2; margin-top: 0;"><i class="fa-solid fa-store"></i> 經濟循環：讓環保變現金</h3>
             <div class="shop-wallet">
-                💰 等值旅遊金：<span id="wallet-display">0</span> 元<br>
-                <span style="font-size: 12px; font-weight: normal; color: #888;">(自動轉換比例：10 綠能點 = 1 元)</span>
+                💰 碳幣等值旅遊金：<span id="wallet-display">0</span> 元<br>
+                <span style="font-size: 12px; font-weight: normal; color: #888;">(自動轉換比例：每 10 碳幣 = $1 TWD)</span>
             </div>
-            
             <div id="shop-list-container"></div>
         </div>
 
@@ -327,11 +325,6 @@
     </div>
 
     <script>
-        // 🌟 修正點：提前宣告全域變數，防止未定義報錯
-        let currentUser = null;
-        let userPoints = 0;
-        let inventory = {};
-
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -345,6 +338,11 @@
         const SUPABASE_URL = 'https://vwoeztbwollawwojnmgz.supabase.co'; 
         const SUPABASE_KEY = 'sb_publishable_0dJ9RgOdwdkCp9g648JyLA_yQ9q7Dtb';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let currentUser = null;
+        let userPoints = 0;
+        let userWallet = 0; // 仍保留此變數以利資料庫同步
+        let inventory = {};
 
         supabaseClient.auth.onAuthStateChange(async (event, session) => {
             if (session && session.user) {
@@ -360,7 +358,7 @@
                 document.getElementById('nav-user-text').innerText = "登入";
                 document.getElementById('auth-section').style.display = 'block';
                 document.getElementById('user-info-section').style.display = 'none';
-                userPoints = 0; inventory = {};
+                userPoints = 0; userWallet = 0; inventory = {};
                 updateWalletDisplay(); updateMailbox(); updateMascot();
             }
         });
@@ -372,15 +370,16 @@
                 inventory = data.inventory || {}; 
                 updateWalletDisplay(); updateMailbox(); updateMascot(); 
             } else { 
-                await supabaseClient.from('users').insert([{ username: username, green_points: 0, inventory: {} }]); 
+                await supabaseClient.from('users').insert([{ username: username, green_points: 0, travel_fund: 0, inventory: {} }]); 
             }
         }
 
         async function handleSignup() { let e = document.getElementById('auth-email').value, p = document.getElementById('auth-password').value; if(!e||!p) return alert("請填寫！"); const { error } = await supabaseClient.auth.signUp({ email: e, password: p }); if(error) alert("❌ 失敗："+error.message); else alert("✅ 註冊成功！"); }
         async function handleLogin() { let e = document.getElementById('auth-email').value, p = document.getElementById('auth-password').value; if(!e||!p) return alert("請填寫！"); const { error } = await supabaseClient.auth.signInWithPassword({ email: e, password: p }); if(error) alert("❌ 失敗："+error.message); else alert("✅ 登入成功！"); }
         
+        // 防卡死的安全登出機制
         async function handleLogout() {
-            currentUser = null; userPoints = 0; inventory = {};
+            currentUser = null; userPoints = 0; userWallet = 0; inventory = {};
             document.getElementById('auth-section').style.display = 'block';
             document.getElementById('user-info-section').style.display = 'none';
             document.getElementById('nav-user-text').innerText = "登入";
@@ -392,14 +391,15 @@
         async function syncDataToCloud() { 
             try { 
                 let t = currentUser ? currentUser.email.split('@')[0] : 'Gasoline'; 
-                await supabaseClient.from('users').update({ green_points: userPoints, inventory: inventory }).eq('username', t); 
+                userWallet = Math.floor(userPoints / 10); // 確保資料庫數字同步
+                await supabaseClient.from('users').update({ green_points: userPoints, travel_fund: userWallet, inventory: inventory }).eq('username', t); 
             } catch (err) {} 
         }
 
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // 🌟 修正點：實裝指數型升級公式 (100, 250, 600, 1500...)
+        // 🌟 核心修改：指數型升級公式實裝
         function updateMascot() {
             let name = document.getElementById('mascot-name');
             let expBar = document.getElementById('mascot-exp-bar');
@@ -410,16 +410,14 @@
             pointsMain.innerText = exp;
 
             let lv = 1;
-            // 建立指數增長的需求陣列
+            // 定義前幾級的指數曲線 (100, 250, 600, 1500, 3750, 9375...)
             let reqXpList = [100, 250, 600, 1500, 3750, 9375]; 
             let currentLevelReq = reqXpList[0];
             let totalXpStartOfLv = 0;
 
-            // 動態迴圈判定當前等級
+            // 自動計算當前應該落在哪個等級
             for (let i = 0; i < 99; i++) {
-                // 如果超過陣列設定，則以上一級的 2.5 倍無限計算
                 currentLevelReq = i < reqXpList.length ? reqXpList[i] : Math.floor(currentLevelReq * 2.5);
-                
                 if (exp >= totalXpStartOfLv + currentLevelReq) {
                     totalXpStartOfLv += currentLevelReq;
                     lv++;
@@ -428,10 +426,10 @@
                 }
             }
 
-            // 計算當前等級內的經驗值進度
+            // 計算目前等級的趴數與顯示文字
             let xpInThisLv = exp - totalXpStartOfLv;
             let percentage = (xpInThisLv / currentLevelReq) * 100;
-            percentage = Math.max(0, Math.min(percentage, 100)); // 確保在 0~100 之間
+            percentage = Math.max(0, Math.min(percentage, 100)); 
 
             name.innerText = `LV${lv}`;
             expBar.style.width = percentage + '%';
@@ -452,7 +450,16 @@
         renderTasks();
 
         const RECOMMENDED_TRIPS = [{ title: "🌿 南投日月潭 3天2夜", points: [{ lat: 24.1120, lng: 120.6160, name: "台中站" }, { lat: 23.8624, lng: 120.9118, name: "水社碼頭" }], zoomCoord: [23.95, 120.75] }, { title: "🌅 新北淡水八里 1日遊", points: [{ lat: 25.0478, lng: 121.5170, name: "台北車站" }, { lat: 25.1678, lng: 121.4456, name: "淡水站" }, { lat: 25.1824, lng: 121.4111, name: "漁人碼頭" }], zoomCoord: [25.12, 121.45] }];
-        const SHOP_ITEMS = [{ name: "TPASS 基北北桃", cost: 1200, icon: "🎫" }, { name: "松山 ➔ 澎湖 機票", cost: 1200, icon: "✈️" }, { name: "CITY CAFE 大杯拿鐵", cost: 55, icon: "☕" }, { name: "奮起湖便當", cost: 99, icon: "🍱" }, { name: "Gogoro 500元", cost: 500, icon: "🛵" }, { name: "YouBike 100元", cost: 100, icon: "🚲" }];
+        
+        // 🌟 核心修改：商城品項完全對接簡報的「經濟循環」概念
+        const SHOP_ITEMS = [
+            { name: "綠色旅宿 $500 折價券", desc: "全台綠色合作旅宿適用", cost: 500, icon: "🏨" },
+            { name: "國家公園電子門票 (50%折抵)", desc: "國家公園、地方特展適用", cost: 100, icon: "🏞️" },
+            { name: "台鐵/客運 綠色班次 8折券", desc: "累積達標獲 8 折優惠", cost: 50, icon: "🚆" },
+            { name: "縣市限定伴手禮兌換券", desc: "兌換專屬優惠券", cost: 200, icon: "🎁" },
+            { name: "TPASS 基北北桃 月票", desc: "大眾運輸通勤首選", cost: 1200, icon: "🎫" },
+            { name: "YouBike 100元騎乘金", desc: "最後一哩路低碳移動", cost: 100, icon: "🚲" }
+        ];
 
         let waypoints = [], routeLegsData = [], routeLayer = null, currentDistanceKm = 0, itemToConsume = "", searchMarker = null;
 
@@ -484,39 +491,50 @@
         }
         function updateGPSButtonState() { let sel = document.getElementById('gps-waypoint-select'), btn = document.getElementById('btn-gps-arrive'); if(sel.value==="") { btn.disabled=true; return; } let idx = parseInt(sel.value); if(waypoints[idx].visited) { btn.disabled=true; btn.innerText="已到達"; btn.className="btn-black"; } else { btn.disabled=false; btn.innerText="📍 抵達"; btn.className="btn-primary"; } }
 
-        function simulateArrivalAndReward() { let idx = parseInt(document.getElementById('gps-waypoint-select').value); if(isNaN(idx) || waypoints[idx].visited) return; let rw=0; if(idx>0 && routeLegsData.length>0) { let s=document.getElementById(`leg-trans-${idx-1}`); if(s) rw=Math.floor(routeLegsData[idx-1].distance * parseFloat(s.options[s.selectedIndex].getAttribute('data-pts'))); } waypoints[idx].visited=true; userPoints+=rw; alert(`抵達！獲得：+${rw} 點`); updateWalletDisplay(); updateDynamicDisplays(); updateMascot(); syncDataToCloud(); }
+        function simulateArrivalAndReward() { let idx = parseInt(document.getElementById('gps-waypoint-select').value); if(isNaN(idx) || waypoints[idx].visited) return; let rw=0; if(idx>0 && routeLegsData.length>0) { let s=document.getElementById(`leg-trans-${idx-1}`); if(s) rw=Math.floor(routeLegsData[idx-1].distance * parseFloat(s.options[s.selectedIndex].getAttribute('data-pts'))); } waypoints[idx].visited=true; userPoints+=rw; alert(`抵達！獲得：+${rw} 碳幣`); updateWalletDisplay(); updateDynamicDisplays(); updateMascot(); syncDataToCloud(); }
 
         async function calculateMultiStopRoute() { if(waypoints.length<2) return; let coords = waypoints.map(w=>`${w.lng},${w.lat}`).join(';'); try { let res = await fetch(`https://router.project-osrm.org/route/v1/driving/${coords}?overview=full&geometries=geojson`); let data = await res.json(); if(data.code==="Ok") { currentDistanceKm = data.routes[0].distance/1000; routeLegsData = data.routes[0].legs.map(l=>({distance: l.distance/1000})); if(routeLayer) map.removeLayer(routeLayer); routeLayer = L.geoJSON(data.routes[0].geometry, {style: {color: "#1976D2", weight:5}}).addTo(map); map.fitBounds(routeLayer.getBounds()); renderLegTransportsUI(); updateResults(); } } catch(e){} }
         
-        function renderLegTransportsUI() { let c = document.getElementById('leg-transports-container'); c.innerHTML=''; routeLegsData.forEach((l, i) => { c.innerHTML += `<div class="input-group"><span style="line-height:40px;">路段 ${i+1}: </span><select id="leg-trans-${i}" onchange="updateResults()"><option value="bike" data-co2="0" data-pts="10">🚲 單車 (10點)</option><option value="bus" data-co2="0.04" data-pts="5" selected>🚌 客運 (5點)</option><option value="car" data-co2="0.14" data-pts="0">🚗 汽車 (0點)</option></select></div>`; }); }
+        function renderLegTransportsUI() { let c = document.getElementById('leg-transports-container'); c.innerHTML=''; routeLegsData.forEach((l, i) => { c.innerHTML += `<div class="input-group"><span style="line-height:40px;">路段 ${i+1}: </span><select id="leg-trans-${i}" onchange="updateResults()"><option value="bike" data-co2="0" data-pts="10">🚲 單車 (10碳幣)</option><option value="bus" data-co2="0.04" data-pts="5" selected>🚌 客運 (5碳幣)</option><option value="car" data-co2="0.14" data-pts="0">🚗 汽車 (0碳幣)</option></select></div>`; }); }
         function updateResults() { let co2=0; routeLegsData.forEach((l, i) => { let s=document.getElementById(`leg-trans-${i}`); if(s) co2 += l.distance*(0.14 - parseFloat(s.options[s.selectedIndex].getAttribute('data-co2'))); }); document.getElementById('res-dist').innerText=currentDistanceKm.toFixed(1); document.getElementById('res-co2').innerText=co2.toFixed(1); }
 
-        // 🌟 修正點：自動匯率折算與直接扣點數機制
+        // 🌟 核心修改：自動將碳幣依比例換算成顯示金額
         function updateWalletDisplay() { 
             let dynamicMoney = Math.floor(userPoints / 10);
             document.getElementById('wallet-display').innerText = dynamicMoney; 
         }
 
-        function renderShop() { let c = document.getElementById('shop-list-container'); SHOP_ITEMS.forEach(i => { c.innerHTML+=`<div class="shop-item"><div>${i.icon} ${i.name}</div><button class="btn-primary" style="width:auto; padding:6px 12px;" onclick="buyItem(${i.cost},'${i.name}','${i.icon}')">${i.cost}元</button></div>`; }); }
+        function renderShop() { 
+            let c = document.getElementById('shop-list-container'); 
+            SHOP_ITEMS.forEach(i => { 
+                c.innerHTML+=`<div class="shop-item">
+                    <div>
+                        <div style="font-weight:bold;">${i.icon} ${i.name}</div>
+                        <span class="shop-desc">${i.desc}</span>
+                    </div>
+                    <button class="btn-primary" style="width:auto; padding:6px 12px; background:#43a047;" onclick="buyItem(${i.cost},'${i.name}','${i.icon}')">${i.cost}元</button>
+                </div>`; 
+            }); 
+        }
         
         function buyItem(cost, name, icon) { 
             if(!currentUser) { switchTab('profile'); return alert("請先登入！"); } 
             
-            // 換算所需點數 (1元 = 10點)
+            // 計算購買所需的碳幣 (1元 = 10點)
             let requiredPoints = cost * 10;
             
             if(userPoints >= requiredPoints) { 
-                userPoints -= requiredPoints; // 結帳直接扣點數
+                userPoints -= requiredPoints; // 直接扣除碳幣
                 inventory[name] ? inventory[name].count++ : inventory[name]={count:1, icon:icon}; 
                 
                 updateWalletDisplay(); updateMailbox(); updateMascot(); syncDataToCloud(); 
-                alert("兌換成功！已發送至您的信箱。"); 
+                alert("兌換成功！優惠券已發送至您的信箱。"); 
             } else { 
-                alert(`餘額不足！購買此道具需要 ${requiredPoints} 綠能點。`); 
+                alert(`碳幣不足！兌換此項目需要 ${requiredPoints} 碳幣 (您目前有 ${userPoints} 幣)。`); 
             } 
         }
         
-        function updateMailbox() { let c = document.getElementById('mailbox-container'), k = Object.keys(inventory); c.innerHTML = k.length ? "" : "<p style='text-align:center; color:#999;'>背包是空的喔！</p>"; k.forEach(key => { c.innerHTML += `<div class="mailbox-item"><span>${inventory[key].icon} ${key} x${inventory[key].count}</span><button class="btn-primary" style="background:#f57f17; width:60px; padding:6px 10px; font-size:12px;" onclick="openBarcode('${key}')">使用</button></div>`; }); }
+        function updateMailbox() { let c = document.getElementById('mailbox-container'), k = Object.keys(inventory); c.innerHTML = k.length ? "" : "<p style='text-align:center; color:#999;'>信箱是空的喔！快去商城兌換吧。</p>"; k.forEach(key => { c.innerHTML += `<div class="mailbox-item"><span>${inventory[key].icon} ${key} x${inventory[key].count}</span><button class="btn-primary" style="background:#f57f17; width:60px; padding:6px 10px; font-size:12px;" onclick="openBarcode('${key}')">使用</button></div>`; }); }
         function openBarcode(n) { itemToConsume=n; document.getElementById('barcode-title').innerText=n; openModal('barcode-modal'); }
         function confirmConsumeTicket() { if(inventory[itemToConsume]) { inventory[itemToConsume].count--; if(inventory[itemToConsume].count<=0) delete inventory[itemToConsume]; updateMailbox(); syncDataToCloud(); closeModal('barcode-modal'); alert("核銷成功");} }
 
