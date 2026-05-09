@@ -55,8 +55,6 @@
         
         .profile-header { text-align: center; padding: 20px 0; }
         .profile-avatar { width: 80px; height: 80px; background: var(--primary); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 40px; color: white; }
-        
-        /* 🌟 背包戰利品 - UI 升級 */
         .mailbox-item { background: #e3f2fd; padding: 12px 15px; border-radius: 8px; margin-bottom: 8px; border-left: 5px solid #1976D2; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05);}
         .btn-orange { background: #f57f17; color: white; border: none; padding: 6px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;}
         
@@ -84,12 +82,10 @@
         .rank-toggle-btn.active { background: var(--primary); color: white; }
         .rank-toggle-btn.inactive { background: #e0e0e0; color: #555; }
         
-        /* 🌟 排行榜 - UI 卡片升級 */
         .rank-item { background: white; border-radius: 10px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.03); border: 1px solid #f0f0f0; }
         .rank-num { font-weight: 900; color: var(--primary); width: 25px; display: inline-block; font-size: 18px; }
         .friend-item { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px; margin-bottom: 8px; border-radius: 8px; border: 1px solid #eee; box-shadow: 0 1px 3px rgba(0,0,0,0.02);}
 
-        /* 掃描線動畫復活 */
         @keyframes scanAnim { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
     </style>
 </head>
@@ -97,7 +93,6 @@
 
     <div id="app-container">
         
-        <!-- 頂部狀態列 -->
         <div class="top-bar">
             <div class="points-pill"><i class="fa-solid fa-leaf"></i><span id="points-display-main">0</span></div>
             <div class="exp-section">
@@ -107,7 +102,6 @@
             </div>
         </div>
 
-        <!-- 🏠 首頁 Tab -->
         <div id="tab-home" class="tab-content active">
             <div class="mascot-area">
               <img id="mascot-img" src="lutu.png" alt="LUTU 兔兔" onerror="this.src='https://dummyimage.com/280x300/cde6d5/3e8e2e.png&text=請放入去背圖'">
@@ -126,7 +120,6 @@
             </div>
         </div>
 
-        <!-- 🗺️ 探索 Tab -->
         <div id="tab-explore" class="tab-content">
             <h3 style="color: var(--primary-dark); margin-top: 0;"><i class="fa-solid fa-compass"></i> 行程規劃</h3>
             <div class="card">
@@ -155,7 +148,6 @@
             </div>
         </div>
 
-        <!-- 🛒 商城 Tab -->
         <div id="tab-shop" class="tab-content">
             <h3 style="color: #1976D2; margin-top: 0;"><i class="fa-solid fa-store"></i> 經濟循環：讓環保變現金</h3>
             <div class="shop-wallet">
@@ -165,7 +157,6 @@
             <div id="shop-list-container"></div>
         </div>
 
-        <!-- 👤 個人 Tab -->
         <div id="tab-profile" class="tab-content">
             <div id="auth-section">
                 <div class="profile-header">
@@ -188,17 +179,18 @@
                     <button class="btn-primary" style="background: #d32f2f; padding: 6px; width: 100px; font-size: 12px; margin-top: 10px;" onclick="handleLogout()">登出</button>
                 </div>
                 
-                <!-- 🌟 新增：居住縣市調整 -->
                 <div class="card" style="padding: 10px 15px;">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <span style="font-weight: bold; font-size: 14px; color: #555;">📍 居住縣市</span>
-                        <select id="user-city-select" onchange="saveProfileCity()" style="width: 120px; padding: 5px; font-size: 13px;">
-                            <option value="新北市">新北市</option>
-                            <option value="台北市">台北市</option>
-                            <option value="桃園市">桃園市</option>
-                            <option value="台中市">台中市</option>
-                            <option value="台南市">台南市</option>
-                            <option value="高雄市">高雄市</option>
+                        <select id="user-city-select" onchange="saveProfileCity()" style="width: 130px; padding: 5px; font-size: 13px;">
+                            <option value="基隆市">基隆市</option><option value="臺北市">臺北市</option><option value="新北市">新北市</option>
+                            <option value="桃園市">桃園市</option><option value="新竹市">新竹市</option><option value="新竹縣">新竹縣</option>
+                            <option value="苗栗縣">苗栗縣</option><option value="臺中市">臺中市</option><option value="彰化縣">彰化縣</option>
+                            <option value="南投縣">南投縣</option><option value="雲林縣">雲林縣</option><option value="嘉義市">嘉義市</option>
+                            <option value="嘉義縣">嘉義縣</option><option value="臺南市">臺南市</option><option value="高雄市">高雄市</option>
+                            <option value="屏東縣">屏東縣</option><option value="宜蘭縣">宜蘭縣</option><option value="花蓮縣">花蓮縣</option>
+                            <option value="臺東縣">臺東縣</option><option value="澎湖縣">澎湖縣</option><option value="金門縣">金門縣</option>
+                            <option value="連江縣">連江縣</option>
                         </select>
                     </div>
                 </div>
@@ -211,7 +203,6 @@
             </div>
         </div>
 
-        <!-- 底部導覽列 -->
         <div class="bottom-nav">
             <div class="nav-item active" onclick="switchTab('home')"><i class="fa-solid fa-house"></i><span>首頁</span></div>
             <div class="nav-item" onclick="switchTab('explore')"><i class="fa-solid fa-map-location-dot"></i><span>探索</span></div>
@@ -219,11 +210,6 @@
             <div class="nav-item" onclick="switchTab('profile')"><i class="fa-solid fa-user"></i><span id="nav-user-text">個人</span></div>
         </div>
 
-        <!-- ========================================== -->
-        <!-- 彈出視窗 (Modals) 完整版 -->
-        <!-- ========================================== -->
-
-        <!-- 🏆 排行榜 Modal (UI 卡片升級版) -->
         <div class="modal-overlay" id="leaderboard-modal">
             <div class="modal-content" style="background-color: #f4f6f8; min-height: 480px;">
                 <button class="close-btn" onclick="closeModal('leaderboard-modal')">×</button>
@@ -239,25 +225,28 @@
                     <option value="co2_month">4. 1個月份減碳排行</option>
                     <option value="co2_week">5. 1週份減碳排行</option>
                 </select>
+                
                 <select id="rank-city-select" onchange="renderLeaderboard()" style="margin-bottom: 15px;">
-                    <option value="新北市">新北市</option>
-                    <option value="台北市">台北市</option>
-                    <option value="台中市">台中市</option>
-                    <option value="台南市">台南市</option>
-                    <option value="高雄市">高雄市</option>
+                    <option value="基隆市">基隆市</option><option value="臺北市">臺北市</option><option value="新北市" selected>新北市</option>
+                    <option value="桃園市">桃園市</option><option value="新竹市">新竹市</option><option value="新竹縣">新竹縣</option>
+                    <option value="苗栗縣">苗栗縣</option><option value="臺中市">臺中市</option><option value="彰化縣">彰化縣</option>
+                    <option value="南投縣">南投縣</option><option value="雲林縣">雲林縣</option><option value="嘉義市">嘉義市</option>
+                    <option value="嘉義縣">嘉義縣</option><option value="臺南市">臺南市</option><option value="高雄市">高雄市</option>
+                    <option value="屏東縣">屏東縣</option><option value="宜蘭縣">宜蘭縣</option><option value="花蓮縣">花蓮縣</option>
+                    <option value="臺東縣">臺東縣</option><option value="澎湖縣">澎湖縣</option><option value="金門縣">金門縣</option>
+                    <option value="連江縣">連江縣</option>
                 </select>
-                <!-- 列表容器 -->
+                
                 <div id="leaderboard-list" style="max-height: 280px; overflow-y: auto; padding-right: 5px;"></div>
             </div>
         </div>
 
-        <!-- 👥 好友管理 Modal -->
         <div class="modal-overlay" id="friends-modal">
             <div class="modal-content" style="background-color: #f4f6f8;">
                 <button class="close-btn" onclick="closeModal('friends-modal')">×</button>
                 <h3 style="color: #1976D2; margin-top: 0;"><i class="fa-solid fa-user-group"></i> 好友管理</h3>
                 <div style="display:flex; gap:5px; margin-bottom:15px;">
-                    <input type="text" id="friend-search-input" placeholder="輸入好友名稱..." style="flex:1;">
+                    <input type="text" id="friend-search-input" placeholder="輸入好友信箱名稱..." style="flex:1;">
                     <button class="btn-primary" style="width:70px;" onclick="addFriend()">加入</button>
                 </div>
                 <h4 style="margin: 0 0 10px 0; color: #555; border-bottom: 2px solid #ddd; padding-bottom: 5px;">我的好友列表 (<span id="friend-count">0</span>/50)</h4>
@@ -265,7 +254,6 @@
             </div>
         </div>
 
-        <!-- 📖 旅行手冊 Modal -->
         <div class="modal-overlay" id="itinerary-modal">
             <div class="modal-content" style="background-color: #f7f9fa;">
                 <button class="close-btn" onclick="closeModal('itinerary-modal')">×</button>
@@ -284,25 +272,24 @@
             </div>
         </div>
 
-        <!-- 🏅 在地任務 Modal -->
         <div class="modal-overlay" id="task-modal">
             <div class="modal-content" style="background-color: #f4f6f8;">
                 <button class="close-btn" onclick="closeModal('task-modal')">×</button>
                 <h3 style="color: var(--primary); margin-top: 0;"><i class="fa-solid fa-medal"></i> 在地任務</h3>
-                <!-- 自動帶入使用者的居住縣市 -->
                 <select id="city-select" style="margin-bottom: 15px; font-weight: bold; color: #333;" onchange="renderTasks()">
-                    <option value="新北市">新北市 (當前位置)</option>
-                    <option value="台北市">台北市</option>
-                    <option value="桃園市">桃園市</option>
-                    <option value="台中市">台中市</option>
-                    <option value="台南市">台南市</option>
-                    <option value="高雄市">高雄市</option>
+                    <option value="基隆市">基隆市</option><option value="臺北市">臺北市</option><option value="新北市" selected>新北市 (當前位置)</option>
+                    <option value="桃園市">桃園市</option><option value="新竹市">新竹市</option><option value="新竹縣">新竹縣</option>
+                    <option value="苗栗縣">苗栗縣</option><option value="臺中市">臺中市</option><option value="彰化縣">彰化縣</option>
+                    <option value="南投縣">南投縣</option><option value="雲林縣">雲林縣</option><option value="嘉義市">嘉義市</option>
+                    <option value="嘉義縣">嘉義縣</option><option value="臺南市">臺南市</option><option value="高雄市">高雄市</option>
+                    <option value="屏東縣">屏東縣</option><option value="宜蘭縣">宜蘭縣</option><option value="花蓮縣">花蓮縣</option>
+                    <option value="臺東縣">臺東縣</option><option value="澎湖縣">澎湖縣</option><option value="金門縣">金門縣</option>
+                    <option value="連江縣">連江縣</option>
                 </select>
                 <div id="task-list-container"></div>
             </div>
         </div>
 
-        <!-- 📷 QR Scanner Modal -->
         <div class="modal-overlay" id="qr-scanner-modal">
             <div class="modal-content" style="background: #222; color: white;">
                 <button class="close-btn" style="color: white;" onclick="closeModal('qr-scanner-modal')">×</button>
@@ -315,7 +302,6 @@
             </div>
         </div>
 
-        <!-- 👕 衣櫥 Modal -->
         <div class="modal-overlay" id="wardrobe-modal">
             <div class="modal-content">
                 <button class="close-btn" onclick="closeModal('wardrobe-modal')">×</button>
@@ -324,15 +310,14 @@
                 <div class="wardrobe-grid">
                     <div class="wardrobe-slot active"><i class="fa-solid fa-check-circle" style="font-size: 24px; margin-bottom: 5px;"></i>基本款</div>
                     <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>新北限定</div>
-                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>台北限定</div>
-                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>台中限定</div>
-                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>台南限定</div>
+                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>臺北限定</div>
+                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>臺中限定</div>
+                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>臺南限定</div>
                     <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>高雄限定</div>
                 </div>
             </div>
         </div>
 
-        <!-- 🎟️ 條碼核銷 Modal -->
         <div class="modal-overlay" id="barcode-modal">
             <div class="modal-content" style="text-align: center;">
                 <button class="close-btn" onclick="closeModal('barcode-modal')">×</button>
@@ -341,23 +326,19 @@
                 <button class="btn-primary" onclick="confirmConsumeTicket()">模擬店員核銷</button>
             </div>
         </div>
-
     </div>
 
     <script>
-        // ==========================================
-        // 1. 初始化與資料庫同步 (本地 + 雲端)
-        // ==========================================
         const SUPABASE_URL = 'https://vwoeztbwollawwojnmgz.supabase.co'; 
         const SUPABASE_KEY = 'sb_publishable_0dJ9RgOdwdkCp9g648JyLA_yQ9q7Dtb';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let currentUser = null;
-        let userPoints = 0; // 碳幣 (10:1 換算自經驗)
-        let userExp = 0;    // 總經驗值 (決定等級)
-        let inventory = {}; // 背包道具
-        let userCity = "新北市"; // 🌟 新增：使用者居住縣市
-        let myFriends = ['徒步小尖兵', '綠色騎士', '單車小尖兵']; // 預設好友
+        let userPoints = 0; 
+        let userExp = 0;    
+        let inventory = {}; 
+        let userCity = "新北市"; 
+        let myFriends = []; // 預設不再給假好友，真實抓取
         let isSyncing = false; 
 
         function saveLocalData() {
@@ -385,7 +366,7 @@
                 userPoints = data.green_points || 0;
                 userExp = data.exp || 0;
                 inventory = data.inventory || {};
-                userCity = data.city || userCity; // 讀取雲端縣市
+                userCity = data.city || userCity; 
                 myFriends = data.friends || myFriends;
                 saveLocalData();
             } else {
@@ -403,9 +384,6 @@
             await supabaseClient.from('users').update({ green_points: userPoints, exp: userExp, inventory: inventory, friends: myFriends, city: userCity }).eq('username', t);
         }
 
-        // ==========================================
-        // 2. 登入系統與介面切換
-        // ==========================================
         supabaseClient.auth.onAuthStateChange((event, session) => {
             if (session) {
                 currentUser = session.user;
@@ -443,7 +421,6 @@
             alert("已登出！系統切換回空本機模式。");
         }
 
-        // 🌟 新增：儲存個人居住縣市
         function saveProfileCity() {
             userCity = document.getElementById('user-city-select').value;
             syncDataToCloud();
@@ -461,18 +438,11 @@
             refreshAllUI();
         }
 
-        // ==========================================
-        // 3. UI 更新與升級公式
-        // ==========================================
-        function refreshAllUI() {
-            updateMascot();
-            updateWalletDisplay();
-            updateMailbox();
-        }
+        function refreshAllUI() { updateMascot(); updateWalletDisplay(); updateMailbox(); }
 
         function updateMascot() {
             let name = document.getElementById('mascot-name'), expBar = document.getElementById('mascot-exp-bar'), expText = document.getElementById('mascot-exp-text');
-            document.getElementById('points-display-main').innerText = userPoints; // 碳幣顯示
+            document.getElementById('points-display-main').innerText = userPoints; 
 
             let lv = 1, reqXpList = [100, 250, 600, 1500, 3750, 9375], currentReq = reqXpList[0], startXp = 0;
             for (let i = 0; i < 99; i++) {
@@ -487,51 +457,27 @@
             expText.innerText = `EX ${xpInThisLv}/${currentReq}`;
         }
 
-        // ==========================================
-        // 4. 商城與信箱
-        // ==========================================
-        const SHOP_ITEMS = [
-            { name: "綠色旅宿 $500 折價券", desc: "全台綠色合作旅宿適用", cost: 500, icon: "🏨" },
-            { name: "國家公園電子門票", desc: "最高折抵 50% 票價", cost: 100, icon: "🏞️" },
-            { name: "台鐵/客運 綠色班次 8折券", desc: "累積達標獲優惠", cost: 50, icon: "🚆" },
-            { name: "縣市限定伴手禮兌換券", desc: "兌換專屬優惠券", cost: 200, icon: "🎁" },
-            { name: "TPASS 基北北桃 月票", desc: "大眾運輸通勤首選", cost: 1200, icon: "🎫" },
-            { name: "YouBike 100元騎乘金", desc: "最後一哩路低碳移動", cost: 100, icon: "🚲" }
-        ];
-
+        const SHOP_ITEMS = [{ name: "綠色旅宿 $500 折價券", desc: "全台綠色合作旅宿適用", cost: 500, icon: "🏨" }, { name: "國家公園電子門票", desc: "最高折抵 50% 票價", cost: 100, icon: "🏞️" }, { name: "台鐵/客運 綠色班次 8折券", desc: "累積達標獲優惠", cost: 50, icon: "🚆" }, { name: "縣市限定伴手禮兌換券", desc: "兌換專屬優惠券", cost: 200, icon: "🎁" }, { name: "TPASS 基北北桃 月票", desc: "大眾運輸通勤首選", cost: 1200, icon: "🎫" }, { name: "YouBike 100元騎乘金", desc: "最後一哩路低碳移動", cost: 100, icon: "🚲" }];
         function renderShop() { 
             let c = document.getElementById('shop-list-container'); c.innerHTML='';
-            SHOP_ITEMS.forEach(i => { 
-                c.innerHTML+=`<div class="shop-item"><div><div style="font-weight:bold;">${i.icon} ${i.name}</div><span class="shop-desc">${i.desc}</span></div><button class="btn-primary" style="width:auto; padding:6px 12px; background:#43a047;" onclick="buyItem(${i.cost},'${i.name}','${i.icon}')">${i.cost}元</button></div>`; 
-            }); 
+            SHOP_ITEMS.forEach(i => { c.innerHTML+=`<div class="shop-item"><div><div style="font-weight:bold;">${i.icon} ${i.name}</div><span class="shop-desc">${i.desc}</span></div><button class="btn-primary" style="width:auto; padding:6px 12px; background:#43a047;" onclick="buyItem(${i.cost},'${i.name}','${i.icon}')">${i.cost}元</button></div>`; }); 
         }
-        
         function updateWalletDisplay() { document.getElementById('wallet-display').innerText = Math.floor(userPoints / 10); }
-
         function buyItem(cost, name, icon) { 
             let reqPoints = cost * 10;
-            if(userPoints >= reqPoints) { 
-                userPoints -= reqPoints; // 🌟 只扣錢不扣經驗值
-                inventory[name] ? inventory[name].count++ : inventory[name]={count:1, icon:icon}; 
-                syncDataToCloud(); refreshAllUI(); alert("兌換成功！已發送至您的信箱。"); 
-            } else { alert(`碳幣不足！需要 ${reqPoints} 碳幣 (您目前有 ${userPoints})。`); } 
+            if(userPoints >= reqPoints) { userPoints -= reqPoints; inventory[name] ? inventory[name].count++ : inventory[name]={count:1, icon:icon}; syncDataToCloud(); refreshAllUI(); alert("兌換成功！已發送至您的信箱。"); } 
+            else { alert(`碳幣不足！需要 ${reqPoints} 碳幣 (您目前有 ${userPoints})。`); } 
         }
-
         function updateMailbox() { 
-            let c = document.getElementById('mailbox-container'), k = Object.keys(inventory); 
-            c.innerHTML = k.length ? "" : "<p style='text-align:center; color:#999;'>背包是空的喔！</p>"; 
-            k.forEach(key => { 
-                // 🌟 UI 升級：藍色邊線的卡片與橘色按鈕
-                c.innerHTML += `<div class="mailbox-item"><span>${inventory[key].icon} ${key} x${inventory[key].count}</span><button class="btn-orange" onclick="openBarcode('${key}')">使用</button></div>`; 
-            }); 
+            let c = document.getElementById('mailbox-container'), k = Object.keys(inventory); c.innerHTML = k.length ? "" : "<p style='text-align:center; color:#999;'>背包是空的喔！</p>"; 
+            k.forEach(key => { c.innerHTML += `<div class="mailbox-item"><span>${inventory[key].icon} ${key} x${inventory[key].count}</span><button class="btn-orange" onclick="openBarcode('${key}')">使用</button></div>`; }); 
         }
         function openBarcode(n) { itemToConsume=n; document.getElementById('barcode-title').innerText=n; openModal('barcode-modal'); }
         function confirmConsumeTicket() { if(inventory[itemToConsume]) { inventory[itemToConsume].count--; if(inventory[itemToConsume].count<=0) delete inventory[itemToConsume]; syncDataToCloud(); refreshAllUI(); closeModal('barcode-modal'); alert("核銷成功");} }
 
         // ==========================================
-        // 5. 排行榜與好友 (動態資料)
+        // 🌟 核心更新：排行榜全自動抓取真實 Supabase 資料庫
         // ==========================================
-        /* 註：好友排行未來可透過 Supabase 的 .in('username', myFriends) 進行資料庫查詢實作。目前使用本地假資料模擬展示。 */
         let currentRankMode = 'national'; 
 
         function openLeaderboard() { openModal('leaderboard-modal'); renderLeaderboard(); }
@@ -541,31 +487,73 @@
             document.getElementById('btn-rank-friend').className = mode === 'friend' ? 'rank-toggle-btn active' : 'rank-toggle-btn inactive';
             renderLeaderboard(); 
         }
-        function renderLeaderboard() {
+        
+        async function renderLeaderboard() {
             let cat = document.getElementById('rank-category').value;
             let citySel = document.getElementById('rank-city-select');
             citySel.style.display = (cat === 'lv_city') ? 'block' : 'none';
-            let list = document.getElementById('leaderboard-list'); list.innerHTML = '';
             
-            let prefixes = ['環保', '減碳', '綠色', '單車', '徒步'], suffixes = ['達人', '勇者', '騎士', '大使', '小尖兵'];
-            let count = currentRankMode === 'national' ? 10 : myFriends.length + 1;
+            let list = document.getElementById('leaderboard-list'); 
+            list.innerHTML = '<div style="text-align:center; padding:20px; color:#999;"><i class="fa-solid fa-spinner fa-spin"></i> 正在向伺服器同步資料中...</div>';
+            
+            // 🌟 1. 向資料庫發起真實請求 (無造假)
+            const { data, error } = await supabaseClient.from('users').select('username, exp, green_points, city');
+            
+            if (error || !data) {
+                list.innerHTML = '<div style="text-align:center; padding: 20px; color:#d32f2f;">無法取得雲端資料，請檢查網路連線。</div>';
+                return;
+            }
 
-            // 模擬排序資料
-            for(let i=1; i<=count; i++) {
-                let name = (currentRankMode === 'friend' && i <= myFriends.length) ? myFriends[i-1] : prefixes[Math.floor(Math.random()*prefixes.length)] + suffixes[Math.floor(Math.random()*suffixes.length)];
-                if(i === 3) name = (currentUser ? currentUser.email.split('@')[0] : "訪客") + " (你)";
+            let users = data;
+            let myName = currentUser ? currentUser.email.split('@')[0] : '訪客';
+
+            // 🌟 2. 依照「好友模式」或「各縣市」過濾資料
+            if (currentRankMode === 'friend') {
+                users = users.filter(u => myFriends.includes(u.username) || u.username === myName);
+            } else if (cat === 'lv_city') {
+                users = users.filter(u => u.city === citySel.value);
+            }
+
+            // 🌟 3. 排序資料：如果是減碳(CO2)以 green_points 排序，如果是等級以 exp 排序
+            if (cat.includes('co2')) {
+                users.sort((a, b) => (b.green_points || 0) - (a.green_points || 0));
+            } else {
+                users.sort((a, b) => (b.exp || 0) - (a.exp || 0));
+            }
+
+            list.innerHTML = '';
+            if (users.length === 0) {
+                list.innerHTML = '<div style="text-align:center; padding: 20px; color:#999;">目前沒有資料</div>';
+                return;
+            }
+
+            // 🌟 4. 渲染出真實排名卡片
+            users.forEach((u, i) => {
+                let displayName = u.username === myName ? `${u.username} (你)` : u.username;
                 
-                let score = 0, unit = "";
-                if(cat.includes('co2')) { score = Math.floor(1000 / i) + Math.floor(Math.random()*50); unit = " kg"; } 
-                else { score = Math.floor(15 / Math.sqrt(i)); if(score === 0) score = 1; unit = " LV"; }
+                // 還原真實等級
+                let lv = 1, reqXpList = [100, 250, 600, 1500, 3750, 9375], currentReq = reqXpList[0], startXp = 0;
+                let userExpVal = u.exp || 0;
+                for (let j = 0; j < 99; j++) {
+                    currentReq = j < reqXpList.length ? reqXpList[j] : Math.floor(currentReq * 2.5);
+                    if (userExpVal >= startXp + currentReq) { startXp += currentReq; lv++; } else break;
+                }
 
-                // 🌟 UI 升級：白色圓角卡片與綠色數字
+                let score = 0, unit = "";
+                if(cat.includes('co2')) { 
+                    score = ((u.green_points || 0) / 10).toFixed(1); // 假設每10碳幣等於省下 1kg 碳
+                    unit = " kg"; 
+                } else { 
+                    score = lv; 
+                    unit = " LV"; 
+                }
+
                 list.innerHTML += `
                 <div class="rank-item">
-                    <span><strong class="rank-num">${i}</strong> ${name}</span>
+                    <span><strong class="rank-num">${i + 1}</strong> ${displayName}</span>
                     <span style="font-weight:bold; color:#555;">${score}${unit}</span>
                 </div>`;
-            }
+            });
         }
 
         function openFriends() { openModal('friends-modal'); renderFriendList(); }
@@ -583,31 +571,21 @@
         function removeFriend(idx) { if(confirm("確定要解除好友關係嗎？")) { myFriends.splice(idx, 1); syncDataToCloud(); renderFriendList(); } }
 
         // ==========================================
-        // 6. 在地任務系統 (10:1 經驗碳幣雙軌制)
+        // 6. 在地任務系統
         // ==========================================
         let currentTaskExp = 0, currentTaskCoin = 0, currentTaskItem = "";
         function renderTasks() {
-            // 打開任務視窗時，預設帶入使用者的居住縣市
             let selectElem = document.getElementById('city-select');
             let city = selectElem.value;
             
             let c = document.getElementById('task-list-container'); c.innerHTML = ""; 
             let tasks = [];
-            // 🌟 10:1 雙軌獎勵設定 (exp, coin)
-            if(city === "新北市") tasks = [
-                { name: "八里左岸自行車道打卡", exp: 150, coin: 15, reward: "☕ 八里咖啡券" }, 
-                { name: "淡水老街不用塑膠袋", exp: 100, coin: 10, reward: "🎟️ 淡水阿給折價券" }
-            ];
-            else if(city === "台北市") tasks = [
-                { name: "搭乘捷運至陽明山", exp: 200, coin: 20, reward: "🌿 限定明信片" }, 
-                { name: "自備杯至大稻埕", exp: 80, coin: 8, reward: "🥤 飲品折價券" }
-            ];
-            else tasks = [
-                { name: "低碳旅宿 Check-in", exp: 200, coin: 20, reward: "🎁 驚喜小禮" }, 
-                { name: "租借 YouBike", exp: 50, coin: 5, reward: "無" }
-            ];
+            // 如果是在這幾個縣市，有特殊任務，其餘預設
+            if(city === "新北市") tasks = [{ name: "八里左岸自行車道打卡", exp: 150, coin: 15, reward: "☕ 八里咖啡券" }, { name: "淡水老街不用塑膠袋", exp: 100, coin: 10, reward: "🎟️ 淡水阿給折價券" }];
+            else if(city === "臺北市") tasks = [{ name: "搭乘捷運至陽明山", exp: 200, coin: 20, reward: "🌿 限定明信片" }, { name: "自備杯至大稻埕", exp: 80, coin: 8, reward: "🥤 飲品折價券" }];
+            else if(city === "臺中市") tasks = [{ name: "參觀歌劇院不索取紙本導覽", exp: 100, coin: 10, reward: "🎭 歌劇院專屬 Skin" }];
+            else tasks = [{ name: "低碳旅宿 Check-in", exp: 200, coin: 20, reward: "🎁 驚喜小禮" }, { name: "租借 YouBike", exp: 50, coin: 5, reward: "無" }];
             
-            // 🌟 UI 升級：綠色解鎖按鈕
             tasks.forEach(t => { 
                 c.innerHTML += `
                 <div class="task-item" onclick="openScanner(${t.exp}, ${t.coin}, '${t.reward}')">
@@ -622,17 +600,12 @@
         function openScanner(exp, coin, rw) { currentTaskExp = exp; currentTaskCoin = coin; currentTaskItem = rw; closeModal('task-modal'); openModal('qr-scanner-modal'); }
         
         function simulateTaskSuccess() { 
-            closeModal('qr-scanner-modal'); 
-            userExp += currentTaskExp; 
-            userPoints += currentTaskCoin; // 🌟 分別增加經驗與碳幣
+            closeModal('qr-scanner-modal'); userExp += currentTaskExp; userPoints += currentTaskCoin; 
             let msg = `🎉 任務達成！\n獲得：\n⭐ +${currentTaskExp} 經驗\n💰 +${currentTaskCoin} 碳幣`; 
             if(currentTaskItem !== "無") { inventory[currentTaskItem] ? inventory[currentTaskItem].count += 1 : inventory[currentTaskItem] = { count: 1, icon: "🎁" }; msg += `\n🎁 戰利品：${currentTaskItem}`; } 
             syncDataToCloud(); refreshAllUI(); alert(msg); 
         }
 
-        // ==========================================
-        // 7. 地圖、規劃與結算系統
-        // ==========================================
         const RECOMMENDED_TRIPS = [{ title: "🌿 南投日月潭 3天2夜", points: [{ lat: 24.1120, lng: 120.6160, name: "台中站" }, { lat: 23.8624, lng: 120.9118, name: "水社碼頭" }], zoomCoord: [23.95, 120.75] }, { title: "🌅 新北淡水八里 1日遊", points: [{ lat: 25.0478, lng: 121.5170, name: "台北車站" }, { lat: 25.1678, lng: 121.4456, name: "淡水站" }, { lat: 25.1824, lng: 121.4111, name: "漁人碼頭" }], zoomCoord: [25.12, 121.45] }];
         let waypoints = [], routeLegsData = [], routeLayer = null, currentDistanceKm = 0, searchMarker = null;
 
@@ -663,7 +636,7 @@
             let idx = parseInt(document.getElementById('gps-waypoint-select').value); if(isNaN(idx) || waypoints[idx].visited) return; 
             let expRw=0; if(idx>0 && routeLegsData.length>0) { let s=document.getElementById(`leg-trans-${idx-1}`); if(s) expRw=Math.floor(routeLegsData[idx-1].distance * parseFloat(s.options[s.selectedIndex].getAttribute('data-pts'))); } 
             waypoints[idx].visited=true; 
-            let coinRw = Math.floor(expRw / 10); // 導航也套用 10:1
+            let coinRw = Math.floor(expRw / 10); 
             userExp+=expRw; userPoints+=coinRw; 
             alert(`抵達！獲得：+${expRw} 經驗 | +${coinRw} 碳幣`); syncDataToCloud(); updateDynamicDisplays(); refreshAllUI(); 
         }
@@ -675,7 +648,6 @@
 
         function openModal(id) { 
             if(id === 'task-modal') {
-                // 開啟任務時，自動將下拉選單帶入使用者的居住縣市
                 let sel = document.getElementById('city-select');
                 if([...sel.options].some(o => o.value === userCity)) { sel.value = userCity; }
                 renderTasks();
@@ -684,10 +656,7 @@
         }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // 啟動初始化
-        initRecommendedTrips(); 
-        renderShop();
-        loadLocalData();
+        initRecommendedTrips(); renderShop(); loadLocalData();
     </script>
 </body>
 </html>
