@@ -24,9 +24,8 @@
             display: flex; justify-content: center; align-items: center; min-height: 100vh;
         }
 
-        /* 📱 模擬手機外殼 */
         #app-container {
-            width: 390px; height: 844px; /* iPhone 14 比例 */
+            width: 390px; height: 844px;
             background-color: var(--bg-mint);
             position: relative; overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
@@ -43,36 +42,28 @@
             margin-bottom: 15px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
         }
         .points-pill i { color: white; background: var(--primary); border-radius: 50%; padding: 4px; font-size: 14px; }
-        .exp-section { display: flex; align-items: center; justify-content: space-between; font-weight: bold; font-size: 14px; position: relative; }
+        .exp-section { display: flex; align-items: center; justify-content: space-between; font-weight: bold; font-size: 14px; }
         .lv-text { font-size: 22px; font-weight: 900; color: #333; margin-right: 10px; }
         .exp-bar-container { flex: 1; background: #666; height: 12px; border-radius: 6px; overflow: hidden; position: relative; }
         #mascot-exp-bar { height: 100%; background: var(--primary); width: 0%; transition: 0.5s; }
-        .exp-text { font-size: 11px; color: #333; position: absolute; right: 0; top: -18px; }
+        .exp-text { font-size: 12px; text-align: right; margin-top: 5px; color: #333; position: absolute; right: 20px; top: 80px; }
 
-        /* --- 分頁系統 (Tabs) --- */
-        .tab-content { flex: 1; display: none; overflow-y: auto; padding-bottom: 85px; }
+        /* --- 分頁系統 --- */
+        .tab-content { flex: 1; display: none; overflow-y: auto; padding-bottom: 80px; }
         .tab-content.active { display: flex; flex-direction: column; }
 
-        /* 🏠 首頁 Tab (修正跑版) */
-        #tab-home { background: var(--bg-mint); position: relative; overflow: hidden; height: 100%; }
-        .mascot-area { 
-            position: absolute; top: 120px; width: 100%; height: calc(100% - 320px);
-            display: flex; justify-content: center; align-items: flex-end; z-index: 5; 
-        }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
-        #mascot-img { max-height: 90%; max-width: 80%; object-fit: contain; animation: float 4s ease-in-out infinite; margin-bottom: 20px;}
-        
-        /* 泥土地與三大按鈕 */
-        .ground-area { position: absolute; bottom: 0; width: 100%; height: 220px; background-color: var(--bg-brown); z-index: 1; border-top: 10px solid #7a5a3e; }
-        .action-buttons { 
-            position: absolute; bottom: 95px; /* 把它往上推，避開底部導覽列 */
-            width: 100%; display: flex; justify-content: center; gap: 15px; padding: 0 15px; box-sizing: border-box; z-index: 10; 
-        }
+        /* 🏠 首頁 Tab */
+        #tab-home { background: var(--bg-mint); position: relative; overflow: hidden; }
+        .mascot-area { flex: 1; display: flex; justify-content: center; align-items: center; z-index: 5; margin-bottom: 120px; }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
+        #mascot-img { width: 280px; height: auto; object-fit: contain; animation: float 4s ease-in-out infinite; }
+        .ground-area { position: absolute; bottom: 0; width: 100%; height: 180px; background-color: var(--bg-brown); z-index: 1; border-top: 10px solid #7a5a3e; }
+        .action-buttons { position: absolute; bottom: 20px; width: 100%; display: flex; justify-content: center; gap: 15px; padding: 0 15px; box-sizing: border-box; z-index: 10; }
         .action-btn { background: white; border-radius: 15px; width: 100px; height: 100px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2); cursor: pointer; border: none; }
         .action-btn i { font-size: 35px; color: var(--primary); margin-bottom: 8px; }
         .action-btn span { font-size: 13px; font-weight: bold; color: var(--primary-dark); }
 
-        /* 🗺️ 探索 Tab (地圖) */
+        /* 🗺️ 探索 Tab */
         #tab-explore { background: #f0f4f8; padding: 15px; box-sizing: border-box; }
         #map { width: 100%; height: 300px; border-radius: 12px; border: 2px solid #ddd; margin: 10px 0; z-index: 1; }
         .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
@@ -105,14 +96,11 @@
         
         .modal-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 200; justify-content: center; align-items: center; border-radius: 32px; }
         .modal-content { background: white; padding: 20px; border-radius: 16px; width: 85%; max-height: 80%; overflow-y: auto; position: relative; box-sizing: border-box; }
-        .close-btn { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 24px; color: #888; cursor: pointer; }
+        .close-btn { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 24px; color: #888; }
         
-        /* 衣櫥網格 */
         .wardrobe-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
         .wardrobe-slot { background: #f5f5f5; border: 2px dashed #ccc; height: 100px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #999; font-size: 12px; }
         .wardrobe-slot.active { border: 2px solid var(--primary); background: #e8f5e9; color: var(--primary-dark); }
-        
-        /* 任務列表 */
         .task-item { background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
     </style>
 </head>
@@ -120,7 +108,6 @@
 
     <div id="app-container">
         
-        <!-- 頂部狀態列 -->
         <div class="top-bar">
             <div class="points-pill">
                 <i class="fa-solid fa-leaf"></i>
@@ -131,22 +118,18 @@
                 <div class="exp-bar-container">
                     <div id="mascot-exp-bar"></div>
                 </div>
-                <div id="mascot-exp-text" class="exp-text">EX 0/1000</div>
             </div>
+            <div id="mascot-exp-text" class="exp-text">EX 0/1000</div>
         </div>
 
-        <!-- ========================================== -->
-        <!-- 🏠 分頁 1：首頁 (Home) -->
-        <!-- ========================================== -->
         <div id="tab-home" class="tab-content active">
             <div class="mascot-area">
-                <!-- 🌟 換上你的兔子圖片 (檔案請命名為 rabbit.png 並放在同一個資料夾) -->
-                <img id="mascot-img" src="rabbit.png" alt="LUTU 兔兔" onerror="this.src='https://api.dicebear.com/7.x/shapes/svg?seed=LUTU_Mascot&backgroundColor=transparent'">
+                <img id="mascot-img" src="https://api.dicebear.com/7.x/shapes/svg?seed=LUTU_Mascot&backgroundColor=transparent" alt="LUTU 兔兔">
             </div>
             <div class="ground-area"></div>
             <div class="action-buttons">
-                <button class="action-btn" onclick="switchTab('explore')">
-                    <i class="fa-solid fa-map-location-dot"></i>
+                <button class="action-btn" onclick="openModal('itinerary-modal')">
+                    <i class="fa-solid fa-book-open"></i>
                     <span>旅行手冊</span>
                 </button>
                 <button class="action-btn" onclick="openModal('task-modal')">
@@ -160,12 +143,8 @@
             </div>
         </div>
 
-        <!-- ========================================== -->
-        <!-- 🗺️ 分頁 2：探索 (地圖規劃) -->
-        <!-- ========================================== -->
         <div id="tab-explore" class="tab-content">
             <h3 style="color: var(--primary-dark);"><i class="fa-solid fa-compass"></i> 行程規劃</h3>
-            
             <div class="card">
                 <select id="recommended-itinerary-select" onchange="loadSelectedRecommended()">
                     <option value="">-- 載入精選低碳行程 --</option>
@@ -194,9 +173,6 @@
             </div>
         </div>
 
-        <!-- ========================================== -->
-        <!-- 🛒 分頁 3：商城 -->
-        <!-- ========================================== -->
         <div id="tab-shop" class="tab-content">
             <h3 style="color: #1976D2;"><i class="fa-solid fa-store"></i> 旅遊金商城</h3>
             <div class="shop-wallet">
@@ -206,9 +182,6 @@
             <div id="shop-list-container"></div>
         </div>
 
-        <!-- ========================================== -->
-        <!-- 👤 分頁 4：個人 (會員與信箱) -->
-        <!-- ========================================== -->
         <div id="tab-profile" class="tab-content">
             <div id="auth-section">
                 <div class="profile-header">
@@ -238,9 +211,6 @@
             </div>
         </div>
 
-        <!-- ========================================== -->
-        <!-- 底部導覽列 -->
-        <!-- ========================================== -->
         <div class="bottom-nav">
             <div class="nav-item active" onclick="switchTab('home')">
                 <i class="fa-solid fa-house"></i><span>首頁</span>
@@ -256,16 +226,40 @@
             </div>
         </div>
 
-        <!-- ========================================== -->
-        <!-- 彈出視窗 (Modals) -->
-        <!-- ========================================== -->
+        <div class="modal-overlay" id="itinerary-modal">
+            <div class="modal-content" style="background-color: #f7f9fa;">
+                <button class="close-btn" onclick="closeModal('itinerary-modal')">×</button>
+                <h3 style="color: var(--primary-dark); margin-top: 0;"><i class="fa-solid fa-book-open"></i> 我的旅行手冊</h3>
+                
+                <div class="card" style="padding: 12px; margin-bottom: 10px; border-left: 4px solid var(--primary);">
+                    <h4 style="margin: 0 0 10px 0; color: #444;"><i class="fa-solid fa-route"></i> 行程表 (自動同步探索)</h4>
+                    <div id="itinerary-list-display" style="font-size: 13px; color: #666; line-height: 1.8;">
+                        尚未規劃行程，請至「探索」加入景點。
+                    </div>
+                </div>
 
-        <!-- 🏅 在地任務 Modal (含縣市下拉選單) -->
+                <div class="card" style="padding: 12px; margin-bottom: 10px; border-left: 4px solid #1976D2;">
+                    <h4 style="margin: 0 0 10px 0; color: #444;"><i class="fa-solid fa-clipboard-check"></i> 低碳準備清單</h4>
+                    <div style="font-size: 13px; display: flex; flex-direction: column; gap: 8px;">
+                        <label><input type="checkbox"> 環保杯 (解鎖在地飲品任務必備)</label>
+                        <label><input type="checkbox"> 環保餐具袋</label>
+                        <label><input type="checkbox"> 個人牙刷/毛巾 (綠能旅宿不提供)</label>
+                        <label><input type="checkbox"> TPASS 實體卡或悠遊卡</label>
+                        <label><input type="checkbox"> 輕便帆布袋</label>
+                    </div>
+                </div>
+
+                <div class="card" style="padding: 12px; border-left: 4px solid #f57f17;">
+                    <h4 style="margin: 0 0 5px 0; color: #444;"><i class="fa-solid fa-wallet"></i> 預算小提醒</h4>
+                    <p style="font-size: 12px; color: #666; margin: 0;">目前累積里程預估將減少 <span style="font-weight:bold; color:var(--primary);">3.5 kg</span> 碳排。<br>多搭乘大眾運輸可賺取更多旅遊金！</p>
+                </div>
+            </div>
+        </div>
+
         <div class="modal-overlay" id="task-modal">
             <div class="modal-content">
                 <button class="close-btn" onclick="closeModal('task-modal')">×</button>
                 <h3 style="color: var(--primary); margin-top: 0;"><i class="fa-solid fa-medal"></i> 在地環保任務</h3>
-                
                 <select id="city-select" style="margin-bottom: 15px; font-weight: bold; color: #333;" onchange="renderTasks()">
                     <option value="新北市">新北市 (當前位置)</option>
                     <option value="台北市">台北市</option>
@@ -273,27 +267,22 @@
                     <option value="台南市">台南市</option>
                     <option value="高雄市">高雄市</option>
                 </select>
-
                 <div id="task-list-container"></div>
             </div>
         </div>
 
-        <!-- 📷 QR Scanner Modal -->
         <div class="modal-overlay" id="qr-scanner-modal">
             <div class="modal-content" style="background: #222; color: white;">
                 <button class="close-btn" style="color: white;" onclick="closeModal('qr-scanner-modal')">×</button>
                 <h4 style="color: var(--primary); margin-top: 0; text-align: center;">掃描店家活動 QR Code</h4>
                 <div style="width: 100%; height: 200px; background: #111; margin: 15px 0; position: relative; border: 2px dashed var(--primary); border-radius: 12px; overflow: hidden;">
-                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #777; font-size: 14px; text-align: center;">
-                        <i class="fa-solid fa-qrcode" style="font-size: 40px; margin-bottom: 10px;"></i><br>相機啟動中...
-                    </div>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #777; font-size: 14px; text-align: center;"><i class="fa-solid fa-qrcode" style="font-size: 40px; margin-bottom: 10px;"></i><br>相機啟動中...</div>
                     <div style="width: 100%; height: 3px; background: #00ff00; position: absolute; top: 0; left: 0; box-shadow: 0 0 12px #00ff00; animation: scanAnim 2s infinite linear;"></div>
                 </div>
                 <button class="btn-primary" onclick="simulateTaskSuccess()">模擬掃描成功</button>
             </div>
         </div>
 
-        <!-- 👕 衣櫥 Modal (6宮格) -->
         <div class="modal-overlay" id="wardrobe-modal">
             <div class="modal-content">
                 <button class="close-btn" onclick="closeModal('wardrobe-modal')">×</button>
@@ -301,16 +290,15 @@
                 <p style="font-size: 12px; color: #666; margin: 0;">到達指定縣市完成任務即可解鎖專屬 Skin</p>
                 <div class="wardrobe-grid">
                     <div class="wardrobe-slot active"><i class="fa-solid fa-check-circle" style="font-size: 24px; margin-bottom: 5px;"></i>基本款 (預設)</div>
-                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>新北 陶瓷裝</div>
-                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>台北 101裝</div>
-                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>桃園 機捷裝</div>
-                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>台中 歌劇院裝</div>
-                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>台南 古堡裝</div>
+                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>新北限定</div>
+                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>台北限定</div>
+                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>台中限定</div>
+                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>台南限定</div>
+                    <div class="wardrobe-slot"><i class="fa-solid fa-lock" style="font-size: 24px; margin-bottom: 5px;"></i>高雄限定</div>
                 </div>
             </div>
         </div>
 
-        <!-- 🎟️ 條碼核銷 Modal -->
         <div class="modal-overlay" id="barcode-modal">
             <div class="modal-content" style="text-align: center;">
                 <button class="close-btn" onclick="closeModal('barcode-modal')">×</button>
@@ -320,30 +308,19 @@
             </div>
         </div>
 
-    </div> <!-- 結束手機外殼 -->
+    </div>
 
     <script>
-        // ==========================================
-        // 🌟 0. 分頁切換邏輯
-        // ==========================================
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            
             document.getElementById('tab-' + tabId).classList.add('active');
-            
             if(tabId === 'home') document.querySelectorAll('.nav-item')[0].classList.add('active');
-            if(tabId === 'explore') {
-                document.querySelectorAll('.nav-item')[1].classList.add('active');
-                setTimeout(() => { map.invalidateSize(); }, 100); 
-            }
+            if(tabId === 'explore') { document.querySelectorAll('.nav-item')[1].classList.add('active'); setTimeout(() => { map.invalidateSize(); }, 100); }
             if(tabId === 'shop') document.querySelectorAll('.nav-item')[2].classList.add('active');
             if(tabId === 'profile') document.querySelectorAll('.nav-item')[3].classList.add('active');
         }
 
-        // ==========================================
-        // 🌟 1. 初始化 Supabase
-        // ==========================================
         const SUPABASE_URL = 'https://vwoeztbwollawwojnmgz.supabase.co'; 
         const SUPABASE_KEY = 'sb_publishable_0dJ9RgOdwdkCp9g648JyLA_yQ9q7Dtb';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -371,10 +348,8 @@
 
         async function fetchUserData(username) {
             const { data, error } = await supabaseClient.from('users').select('*').eq('username', username).single();
-            if (data) { 
-                userPoints = data.green_points || 0; userWallet = data.travel_fund || 0; inventory = data.inventory || {}; 
-                updateWalletDisplay(); updateMailbox(); updateMascot();
-            } else { await supabaseClient.from('users').insert([{ username: username, green_points: 0, travel_fund: 0, inventory: {} }]); }
+            if (data) { userPoints = data.green_points || 0; userWallet = data.travel_fund || 0; inventory = data.inventory || {}; updateWalletDisplay(); updateMailbox(); updateMascot(); } 
+            else { await supabaseClient.from('users').insert([{ username: username, green_points: 0, travel_fund: 0, inventory: {} }]); }
         }
 
         async function handleSignup() { let e = document.getElementById('auth-email').value, p = document.getElementById('auth-password').value; if(!e||!p) return alert("請填寫！"); const { error } = await supabaseClient.auth.signUp({ email: e, password: p }); if(error) alert("❌ 失敗："+error.message); else alert("✅ 註冊成功！"); }
@@ -382,63 +357,33 @@
         async function handleLogout() { await supabaseClient.auth.signOut(); alert("已登出！"); switchTab('home'); }
         async function syncDataToCloud() { try { let t = currentUser ? currentUser.email.split('@')[0] : 'Gasoline'; await supabaseClient.from('users').update({ green_points: userPoints, travel_fund: userWallet, inventory: inventory }).eq('username', t); } catch (err) {} }
 
-        // ==========================================
-        // 🌟 2. 視窗與吉祥物
-        // ==========================================
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
         function updateMascot() {
             let name = document.getElementById('mascot-name'), expBar = document.getElementById('mascot-exp-bar'), expText = document.getElementById('mascot-exp-text'), pointsMain = document.getElementById('points-display-main');
-            let exp = userPoints; let maxExp = 1000;
+            let exp = userPoints, maxExp = 1000;
             let lv = Math.floor(exp / 200) + 1; if (lv > 5) lv = 5; 
             let percentage = Math.min(((exp % 200) / 200) * 100, 100); if (exp >= 1000) percentage = 100;
-            pointsMain.innerText = exp; name.innerText = `LV${lv}`;
-            expBar.style.width = percentage + '%'; expText.innerText = `EX ${exp}/${maxExp}`;
+            pointsMain.innerText = exp; name.innerText = `LV${lv}`; expBar.style.width = percentage + '%'; expText.innerText = `EX ${exp}/${maxExp}`;
         }
 
-        // ==========================================
-        // 🌟 3. 任務系統
-        // ==========================================
         let currentTaskReward = 0; let currentTaskItem = "";
-
         function renderTasks() {
-            let city = document.getElementById('city-select').value;
-            let container = document.getElementById('task-list-container'); container.innerHTML = "";
-            let tasks = [];
-            if(city === "新北市") { tasks = [{ name: "八里左岸自行車道打卡", points: 150, reward: "☕ 左岸咖啡券" }, { name: "鶯歌陶瓷博物館減碳遊", points: 200, reward: "🎟️ 鶯歌體驗券" }]; } 
-            else if (city === "台北市") { tasks = [{ name: "搭乘捷運至陽明山", points: 200, reward: "🌿 陽明山明信片" }, { name: "自備環保杯至大稻埕", points: 80, reward: "🥤 飲品折價券" }]; } 
-            else { tasks = [{ name: "低碳旅宿 Check-in", points: 200, reward: "🎁 精美小禮物" }, { name: "租借 YouBike", points: 50, reward: "無" }]; }
-
+            let city = document.getElementById('city-select').value, container = document.getElementById('task-list-container');
+            container.innerHTML = ""; let tasks = [];
+            if(city === "新北市") tasks = [{ name: "八里左岸自行車道打卡", points: 150, reward: "☕ 八里咖啡券" }, { name: "淡水老街不用塑膠袋", points: 100, reward: "🎟️ 淡水阿給折價券" }];
+            else if (city === "台北市") tasks = [{ name: "搭乘捷運至陽明山", points: 200, reward: "🌿 限定明信片" }, { name: "自備杯至大稻埕", points: 80, reward: "🥤 飲品折價券" }];
+            else tasks = [{ name: "低碳旅宿 Check-in", points: 200, reward: "🎁 驚喜小禮" }, { name: "租借 YouBike", points: 50, reward: "無" }];
             tasks.forEach(t => { container.innerHTML += `<div class="task-item" onclick="openScanner(${t.points}, '${t.reward}')"><div><div style="font-weight:bold; font-size:14px;">${t.name}</div><div style="font-size:12px; color:#888;">⭐ +${t.points} EXP | 獎勵：${t.reward}</div></div><button class="btn-primary" style="width: auto; padding: 6px 12px; font-size:12px;">解鎖</button></div>`; });
         }
-
-        function openScanner(points, reward) {
-            if(!currentUser) { alert("請先登入才能解鎖任務！"); switchTab('profile'); closeModal('task-modal'); return; }
-            currentTaskReward = points; currentTaskItem = reward;
-            closeModal('task-modal'); openModal('qr-scanner-modal');
-        }
-
-        function simulateTaskSuccess() {
-            closeModal('qr-scanner-modal'); userPoints += currentTaskReward; 
-            let msg = `🎉 任務達成！\n獲得：\n⭐ +${currentTaskReward} 綠能點數`;
-            if(currentTaskItem !== "無") { if(inventory[currentTaskItem]) inventory[currentTaskItem].count += 1; else inventory[currentTaskItem] = { count: 1, icon: "🎁" }; msg += `\n🎁 獲得戰利品：${currentTaskItem}`; }
-            updateWalletDisplay(); updateMailbox(); updateMascot(); syncDataToCloud(); alert(msg);
-        }
+        function openScanner(pts, rw) { if(!currentUser) { alert("請先登入！"); switchTab('profile'); closeModal('task-modal'); return; } currentTaskReward = pts; currentTaskItem = rw; closeModal('task-modal'); openModal('qr-scanner-modal'); }
+        function simulateTaskSuccess() { closeModal('qr-scanner-modal'); userPoints += currentTaskReward; let msg = `🎉 任務達成！\n獲得：\n⭐ +${currentTaskReward} 點`; if(currentTaskItem !== "無") { if(inventory[currentTaskItem]) inventory[currentTaskItem].count += 1; else inventory[currentTaskItem] = { count: 1, icon: "🎁" }; msg += `\n🎁 戰利品：${currentTaskItem}`; } updateWalletDisplay(); updateMailbox(); updateMascot(); syncDataToCloud(); alert(msg); }
         renderTasks();
 
-        // ==========================================
-        // 🌟 4. 行程與商城
-        // ==========================================
-        const RECOMMENDED_TRIPS = [
-            { title: "🌿 南投日月潭 3天2夜", points: [{ lat: 24.1120, lng: 120.6160, name: "台中站" }, { lat: 23.8624, lng: 120.9118, name: "水社碼頭" }], zoomCoord: [23.95, 120.75] },
-            { title: "🌅 新北淡水八里 1日遊", points: [{ lat: 25.0478, lng: 121.5170, name: "台北車站" }, { lat: 25.1678, lng: 121.4456, name: "淡水站" }, { lat: 25.1824, lng: 121.4111, name: "漁人碼頭" }], zoomCoord: [25.12, 121.45] }
-        ];
-        const SHOP_ITEMS = [ { name: "TPASS 基北北桃", cost: 1200, icon: "🎫" }, { name: "松山 ➔ 澎湖 機票", cost: 1200, icon: "✈️" }, { name: "CITY CAFE 大杯拿鐵", cost: 55, icon: "☕" }, { name: "Gogoro 500元", cost: 500, icon: "🛵" } ];
+        const RECOMMENDED_TRIPS = [{ title: "🌿 南投日月潭 3天2夜", points: [{ lat: 24.1120, lng: 120.6160, name: "台中站" }, { lat: 23.8624, lng: 120.9118, name: "水社碼頭" }], zoomCoord: [23.95, 120.75] }, { title: "🌅 新北淡水八里 1日遊", points: [{ lat: 25.0478, lng: 121.5170, name: "台北車站" }, { lat: 25.1678, lng: 121.4456, name: "淡水站" }, { lat: 25.1824, lng: 121.4111, name: "漁人碼頭" }], zoomCoord: [25.12, 121.45] }];
+        const SHOP_ITEMS = [{ name: "TPASS 基北北桃", cost: 1200, icon: "🎫" }, { name: "松山 ➔ 澎湖 機票", cost: 1200, icon: "✈️" }, { name: "CITY CAFE 大杯拿鐵", cost: 55, icon: "☕" }, { name: "奮起湖便當", cost: 99, icon: "🍱" }, { name: "Gogoro 500元", cost: 500, icon: "🛵" }, { name: "YouBike 100元", cost: 100, icon: "🚲" }];
 
-        // ==========================================
-        // 🌟 5. 地圖邏輯
-        // ==========================================
         let waypoints = [], routeLegsData = [], routeLayer = null, currentDistanceKm = 0, itemToConsume = "", searchMarker = null;
 
         const map = L.map('map').setView([23.6978, 120.9605], 7); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
@@ -449,7 +394,24 @@
         async function searchLocation() { const q = document.getElementById('location-search').value; if(!q) return; try { const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=1`); const data = await res.json(); if(data.length > 0) { let lat = parseFloat(data[0].lat), lon = parseFloat(data[0].lon); map.flyTo([lat, lon], 14); if(searchMarker) map.removeLayer(searchMarker); searchMarker = L.marker([lat, lon]).addTo(map).bindPopup("點擊加入").openPopup(); } } catch(e){} }
         
         function clearMap() { waypoints.forEach(w => map.removeLayer(w.marker)); waypoints=[]; routeLegsData=[]; if(routeLayer) map.removeLayer(routeLayer); currentDistanceKm=0; document.getElementById('leg-transports-container').innerHTML = "尚未規劃路線"; updateDynamicDisplays(); updateResults(); }
-        function updateDynamicDisplays() { let gd = document.getElementById('gps-waypoint-select'); if(waypoints.length===0) { gd.innerHTML='<option>請先定位...</option>'; gd.disabled=true; updateGPSButtonState(); return; } gd.disabled=false; gd.innerHTML=""; waypoints.forEach((w,i) => { let n = w.customName || `景點 ${i}`; gd.innerHTML+=`<option value="${i}">[${w.visited?'⚫':'📍'}] ${n}</option>`; }); updateGPSButtonState(); }
+        function updateDynamicDisplays() { 
+            let gd = document.getElementById('gps-waypoint-select'); 
+            let itiList = document.getElementById('itinerary-list-display');
+            if(waypoints.length===0) { 
+                gd.innerHTML='<option>請先定位...</option>'; gd.disabled=true; 
+                itiList.innerHTML = "尚未規劃行程，請至「探索」加入景點。";
+                updateGPSButtonState(); return; 
+            } 
+            gd.disabled=false; gd.innerHTML=""; 
+            let itiHTML = "";
+            waypoints.forEach((w,i) => { 
+                let n = w.customName || `景點 ${i+1}`; 
+                gd.innerHTML+=`<option value="${i}">[${w.visited?'⚫':'📍'}] ${n}</option>`; 
+                itiHTML += `<div style="margin-bottom:6px;"><i class="fa-solid fa-location-dot" style="color:var(--primary); margin-right:5px;"></i> ${n}</div>`;
+            }); 
+            itiList.innerHTML = itiHTML;
+            updateGPSButtonState(); 
+        }
         function updateGPSButtonState() { let sel = document.getElementById('gps-waypoint-select'), btn = document.getElementById('btn-gps-arrive'); if(sel.value==="") { btn.disabled=true; return; } let idx = parseInt(sel.value); if(waypoints[idx].visited) { btn.disabled=true; btn.innerText="已到達"; btn.className="btn-black"; } else { btn.disabled=false; btn.innerText="📍 抵達"; btn.className="btn-primary"; } }
 
         function simulateArrivalAndReward() { let idx = parseInt(document.getElementById('gps-waypoint-select').value); if(isNaN(idx) || waypoints[idx].visited) return; let rw=0; if(idx>0 && routeLegsData.length>0) { let s=document.getElementById(`leg-trans-${idx-1}`); if(s) rw=Math.floor(routeLegsData[idx-1].distance * parseFloat(s.options[s.selectedIndex].getAttribute('data-pts'))); } waypoints[idx].visited=true; userPoints+=rw; alert(`抵達！獲得：+${rw} 點`); updateWalletDisplay(); updateDynamicDisplays(); updateMascot(); syncDataToCloud(); }
@@ -464,17 +426,11 @@
         function updateWalletDisplay() { document.getElementById('wallet-display').innerText=userWallet; }
         function redeemCash() { if(userPoints>=1000) { userPoints-=1000; userWallet+=100; updateWalletDisplay(); updateMascot(); syncDataToCloud(); alert("兌換成功"); } else alert("點數不足 1000 點"); }
         
-        function updateMailbox() { let c = document.getElementById('mailbox-container'), k = Object.keys(inventory); c.innerHTML = k.length ? "" : "<p style='text-align:center; color:#999;'>背包是空的喔！</p>"; k.forEach(key => { c.innerHTML += `<div class="mailbox-item"><span>${inventory[key].icon} ${key} x${inventory[key].count}</span><button class="btn-orange" style="border:none; padding:6px 10px; border-radius:5px; color:white; font-weight:bold;" onclick="openBarcode('${key}')">使用</button></div>`; }); }
+        function updateMailbox() { let c = document.getElementById('mailbox-container'), k = Object.keys(inventory); c.innerHTML = k.length ? "" : "<p style='text-align:center; color:#999;'>背包是空的喔！</p>"; k.forEach(key => { c.innerHTML += `<div class="mailbox-item"><span>${inventory[key].icon} ${key} x${inventory[key].count}</span><button class="btn-primary" style="background:#f57f17; width:60px; padding:6px 10px; font-size:12px;" onclick="openBarcode('${key}')">使用</button></div>`; }); }
         function openBarcode(n) { itemToConsume=n; document.getElementById('barcode-title').innerText=n; openModal('barcode-modal'); }
         function confirmConsumeTicket() { if(inventory[itemToConsume]) { inventory[itemToConsume].count--; if(inventory[itemToConsume].count<=0) delete inventory[itemToConsume]; updateMailbox(); syncDataToCloud(); closeModal('barcode-modal'); alert("核銷成功");} }
 
         initRecommendedTrips(); renderShop(); updateMascot();
-        
-        // 預設載入時如果找不到 rabbit.png，會用備用圖片
-        document.getElementById('mascot-img').onerror = function() {
-            this.onerror = null;
-            this.src = 'https://api.dicebear.com/7.x/shapes/svg?seed=LUTU_Mascot&backgroundColor=transparent';
-        };
     </script>
 </body>
 </html>
