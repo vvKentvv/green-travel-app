@@ -172,7 +172,7 @@
             <div class="card">
                 <h4 style="margin: 0 0 10px 0;">導航與結算</h4>
                 <div class="input-group">
-                    <select id="gps-waypoint-select" disabled><option>請先規劃...</option></select>
+                   <select id="gps-waypoint-select" disabled onchange="updateGPSButtonState()"><option>請先規劃...</option></select>
                     <button id="btn-gps-arrive" class="btn-disabled" style="width: 80px;" onclick="simulateArrivalAndReward()" disabled>抵達</button>
                 </div>
                 <div id="leg-transports-container" style="font-size: 13px; color: #666; margin-top: 10px;">尚未規劃路線</div>
