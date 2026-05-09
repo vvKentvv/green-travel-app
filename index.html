@@ -88,7 +88,7 @@
 
         @keyframes scanAnim { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
 
-        /* 🌟 旅行清單專用樣式 (無摺疊打勾版) */
+        /* 旅行清單專用樣式 */
         .check-item { display: flex; align-items: center; gap: 10px; padding: 8px 5px; border-bottom: 1px solid #eee; font-size: 14px; color: #444; }
         .check-item:last-child { border-bottom: none; }
         .check-item input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
@@ -98,6 +98,7 @@
 
     <div id="app-container">
         
+        <!-- 頂部狀態列 -->
         <div class="top-bar">
             <div class="points-pill"><i class="fa-solid fa-leaf"></i><span id="points-display-main">0</span></div>
             <div class="exp-section">
@@ -130,6 +131,11 @@
         <div id="tab-explore" class="tab-content">
             <h3 style="color: var(--primary-dark); margin-top: 0;"><i class="fa-solid fa-compass"></i> 行程規劃</h3>
             <div class="card">
+                <!-- 🌟 新增：連結到環境部網站的綠色按鈕 -->
+                <button class="btn-primary" style="background: #2e7d32; margin-bottom: 12px; font-size: 14px;" onclick="window.open('https://greenlifestyle.moenv.gov.tw/categories/greenTour?type=1', '_blank')">
+                    <i class="fa-solid fa-leaf"></i> 尋找更多環境部官方綠色行程 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 11px; margin-left: 5px;"></i>
+                </button>
+
                 <select id="recommended-itinerary-select" onchange="loadSelectedRecommended()">
                     <option value="">-- 載入官方精選低碳行程 --</option>
                 </select>
@@ -269,7 +275,7 @@
             </div>
         </div>
 
-        <!-- 📖 旅行手冊 Modal (🌟全新無摺疊清單版) -->
+        <!-- 📖 旅行手冊 Modal (綜合清單版) -->
         <div class="modal-overlay" id="itinerary-modal">
             <div class="modal-content" style="background-color: #f7f9fa;">
                 <button class="close-btn" onclick="closeModal('itinerary-modal')">×</button>
@@ -300,7 +306,6 @@
                         <label class="check-item"><input type="checkbox"> 相機 (含充電器)</label>
                     </div>
 
-                    <!-- 一鍵重置按鈕 -->
                     <button class="btn-primary" onclick="resetChecklist()" style="background:#666; margin-top:15px; font-size:13px; padding: 8px;">🧹 重置所有打勾</button>
                 </div>
             </div>
@@ -637,7 +642,7 @@
         function removeFriend(idx) { if(confirm("確定要解除好友關係嗎？")) { myFriends.splice(idx, 1); syncDataToCloud(); renderFriendList(); } }
 
         // ==========================================
-        // 6. 在地任務系統 (10:1 經驗碳幣雙軌制)
+        // 6. 在地任務系統
         // ==========================================
         let currentTaskExp = 0, currentTaskCoin = 0, currentTaskItem = "";
         function renderTasks() {
@@ -676,7 +681,6 @@
         // ==========================================
         // 7. 地圖導航與 真實 CO2 計算公式
         // ==========================================
-        // 🌟 官方認證綠色旅遊清單 (共5條)
         const RECOMMENDED_TRIPS = [
             { title: "🌿 水源茶香‧坪林低碳 1日遊", points: [{ lat: 24.9678, lng: 121.5412, name: "新店捷運站" }, { lat: 24.9316, lng: 121.7067, name: "坪林茶業博物館" }, { lat: 24.9338, lng: 121.7105, name: "坪林老街" }], zoomCoord: [24.94, 121.62] },
             { title: "🚂 鐵道綠跡‧雙溪貢寮 1日遊", points: [{ lat: 25.0354, lng: 121.8643, name: "雙溪火車站" }, { lat: 25.0006, lng: 121.9575, name: "舊草嶺隧道" }, { lat: 25.0223, lng: 121.9080, name: "貢寮老街" }], zoomCoord: [25.01, 121.91] },
@@ -741,7 +745,7 @@
         function updateResults() { let co2=0; routeLegsData.forEach((l, i) => { let s=document.getElementById(`leg-trans-${i}`); if(s) co2 += l.distance*(0.14 - parseFloat(s.options[s.selectedIndex].getAttribute('data-co2'))); }); document.getElementById('res-dist').innerText=currentDistanceKm.toFixed(1); document.getElementById('res-co2').innerText=co2.toFixed(1); }
 
         // ==========================================
-        // 8. 彈出視窗與旅行清單重置
+        // 8. 彈窗與旅行清單重置
         // ==========================================
         function resetChecklist() {
             const boxes = document.querySelectorAll('.check-item input[type="checkbox"]');
